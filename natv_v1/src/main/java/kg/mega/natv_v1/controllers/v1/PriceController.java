@@ -2,9 +2,10 @@ package kg.mega.natv_v1.controllers.v1;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import kg.mega.natv_v1.dao.BannerRep;
+import kg.mega.natv_v1.dao.PriceRep;
 import kg.mega.natv_v1.models.dtos.BannerDto;
-import kg.mega.natv_v1.services.BannerService;
+import kg.mega.natv_v1.models.dtos.PriceDto;
+import kg.mega.natv_v1.services.PriceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,21 +14,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Api(tags = "Баннер")
+@Api(tags = "Стоимость")
 @RestController
-@RequestMapping("/api/v1/banner")
+@RequestMapping("/api/v1/price")
 @RequiredArgsConstructor
-public class BannerController {
-    private final BannerService bannerService;
+public class PriceController {
+    private final PriceService priceService;
+    private final PriceRep priceRep;
 
     @PostMapping("/save")
     @ApiOperation("Сохранение")
-    ResponseEntity<?> save(@RequestBody BannerDto bannerDto){
+    ResponseEntity<?> save(@RequestBody PriceDto priceDto){
         try{
-            return new ResponseEntity<>(bannerService.save(bannerDto), HttpStatus.CREATED);
+            return new ResponseEntity<>(priceService.save(priceDto), HttpStatus.CREATED);
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
     }
-
 }
