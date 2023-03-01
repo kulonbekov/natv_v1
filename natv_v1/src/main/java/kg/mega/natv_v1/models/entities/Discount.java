@@ -27,4 +27,6 @@ public class Discount {
     @ManyToOne
     @JoinColumn(name = "channel_id")
     Channel channel;
+
+
 }

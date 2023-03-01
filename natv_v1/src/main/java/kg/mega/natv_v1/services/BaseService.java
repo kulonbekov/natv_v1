@@ -4,10 +4,10 @@ import java.util.List;
 
 public interface BaseService<Dto> {
 
-    Dto save (Dto t);
+    Dto save (Dto dto);
     Dto findById (Long id);
     List<Dto> findAll();
-    Dto update (Dto t);
+    Dto update (Dto dto);
     Dto delete (Long id);
 
 }

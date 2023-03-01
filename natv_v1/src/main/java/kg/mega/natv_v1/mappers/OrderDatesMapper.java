@@ -4,11 +4,14 @@ import kg.mega.natv_v1.models.dtos.OrderDatesDto;
 import kg.mega.natv_v1.models.entities.OrderDates;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
 @Mapper
 public interface OrderDatesMapper {
+
+    OrderDatesMapper INSTANCE = Mappers.getMapper(OrderDatesMapper.class);
 
     @Mapping(source = "orderDto", target = "order")
     @Mapping(source = "orderDto.channelDto", target = "order.channel")

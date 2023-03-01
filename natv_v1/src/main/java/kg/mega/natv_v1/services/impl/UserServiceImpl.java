@@ -1,14 +1,25 @@
 package kg.mega.natv_v1.services.impl;
 
+import kg.mega.natv_v1.dao.UserRep;
+import kg.mega.natv_v1.mappers.UserMapper;
 import kg.mega.natv_v1.models.dtos.UserDto;
+import kg.mega.natv_v1.models.entities.User;
 import kg.mega.natv_v1.services.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+    private final UserRep userRep;
+    private final UserMapper userMapper = UserMapper.INSTANCE;
     @Override
-    public UserDto save(UserDto t) {
-        return null;
+    public UserDto save(UserDto userDto) {
+        User user = userMapper.userDtoToUser(userDto);
+        user = userRep.save(user);
+        userDto.setId(user.getId());
+        return userDto;
     }
 
     @Override
