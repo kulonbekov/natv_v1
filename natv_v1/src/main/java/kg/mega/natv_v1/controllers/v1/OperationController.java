@@ -23,16 +23,21 @@ public class OperationController {
 
     @PostMapping("/get/price")
     @ApiOperation("Получить стоимости рекламы на одном канале")
-    ResponseEntity<?> findById(@RequestBody PriceRequest priceRequest) {
-        ChannelDto channelDto = channelService.findById(priceRequest.getChannelId());
-        if(channelDto!=null && channelDto.getChannelStatus().equals(ChannelStatus.TRUE)) {
+    ResponseEntity<?> getPrice(@RequestBody PriceRequest priceRequest) {
+        ChannelDto channelDto = null;
+        try{
+            channelDto = channelService.findById(priceRequest.getChannelId());
+        }catch (Exception e){
+            return ResponseEntity.status(400).body("Channel not found");
+        }
+        if(channelDto.getChannelStatus().equals(ChannelStatus.TRUE)) {
             try {
                 return ResponseEntity.ok(getPriceService.getPrice(priceRequest));
             } catch (Exception e) {
                 return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
             }
         }else{
-            return ResponseEntity.status(400).body("Channel not found");
+            return ResponseEntity.status(400).body("Channel is not active");
         }
     }
 }
