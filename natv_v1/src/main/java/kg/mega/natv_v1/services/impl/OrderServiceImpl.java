@@ -24,7 +24,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto findById(Long id) {
-        return null;
+        Order order = orderRep.findById(id).orElseThrow(()->new RuntimeException("Order not found"));
+        return orderMapper.orderToOrderDto(order);
     }
 
     @Override

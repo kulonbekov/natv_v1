@@ -25,8 +25,8 @@ public class BannerServiceImpl implements BannerService {
 
     @Override
     public BannerDto findById(Long id) {
-
-        return null;
+        Banner banner = bannerRep.findById(id).orElseThrow(()->new RuntimeException("Banner not found"));
+        return bannerMapper.bannerToBannerDto(banner);
     }
 
     @Override

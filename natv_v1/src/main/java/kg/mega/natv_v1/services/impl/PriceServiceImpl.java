@@ -24,7 +24,8 @@ public class PriceServiceImpl implements PriceService {
 
     @Override
     public PriceDto findById(Long id) {
-        return null;
+        Price price = priceRep.findById(id).orElseThrow(()->new RuntimeException("Price not found"));
+        return priceMapper.priceToPriceDto(price);
     }
 
     @Override

@@ -26,7 +26,8 @@ public class OrderDatesServiceImpl implements OrderDatesService {
 
     @Override
     public OrderDatesDto findById(Long id) {
-        return null;
+        OrderDates orderDates = orderDatesRep.findById(id).orElseThrow(()->new RuntimeException("Order dates no found"));
+        return orderDatesMapper.orderDatesToOrderDatesDto(orderDates);
     }
 
     @Override

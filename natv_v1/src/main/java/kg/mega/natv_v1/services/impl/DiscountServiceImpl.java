@@ -24,7 +24,8 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public DiscountDto findById(Long id) {
-        return null;
+        Discount discount = discountRep.findById(id).orElseThrow(()->new RuntimeException("Discount not found"));
+        return discountMapper.discountToDiscountDto(discount);
     }
 
     @Override

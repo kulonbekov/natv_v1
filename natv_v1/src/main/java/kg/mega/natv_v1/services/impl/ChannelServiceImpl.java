@@ -24,7 +24,8 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public ChannelDto findById(Long id) {
-        return null;
+        Channel channel = channelRep.findById(id).orElseThrow(()->new RuntimeException("Channel not found"));
+        return channelMapper.channelToChannelDto(channel);
     }
 
     @Override

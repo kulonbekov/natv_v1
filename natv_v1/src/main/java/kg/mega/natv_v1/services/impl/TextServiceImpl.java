@@ -24,7 +24,8 @@ public class TextServiceImpl implements TextService {
 
     @Override
     public TextDto findById(Long id) {
-        return null;
+        Text text = textRep.findById(id).orElseThrow(()->new RuntimeException("Text not found"));
+        return textMapper.textToTextDto(text);
     }
 
     @Override
