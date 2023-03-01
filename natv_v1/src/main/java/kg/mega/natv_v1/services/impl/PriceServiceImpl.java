@@ -4,6 +4,7 @@ import kg.mega.natv_v1.dao.PriceRep;
 import kg.mega.natv_v1.mappers.PriceMapper;
 import kg.mega.natv_v1.models.dtos.PriceDto;
 import kg.mega.natv_v1.models.entities.Price;
+import kg.mega.natv_v1.services.ChannelService;
 import kg.mega.natv_v1.services.PriceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,12 +14,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PriceServiceImpl implements PriceService {
     private final PriceRep priceRep;
+    private final ChannelService channelService;
     private final PriceMapper priceMapper = PriceMapper.INSTANCE;
     @Override
     public PriceDto save(PriceDto priceDto) {
         Price price = priceMapper.priceDtoToPrice(priceDto);
         price = priceRep.save(price);
         priceDto.setId(price.getId());
+        priceDto.setStartDate(price.getStartDate());
+        priceDto.setEndDate(price.getEndDate());
+        priceDto.setChannelDto(channelService.findById(priceDto.getId()));
         return priceDto;
     }
 

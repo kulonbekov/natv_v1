@@ -9,10 +9,7 @@ import kg.mega.natv_v1.services.PriceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Api(tags = "Стоимость")
 @RestController
@@ -28,7 +25,16 @@ public class PriceController {
         try{
             return new ResponseEntity<>(priceService.save(priceDto), HttpStatus.CREATED);
         }catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+    @GetMapping("/find/by/id")
+    @ApiOperation("Поиск стоимость по id")
+    ResponseEntity<?> findById(@RequestParam Long id) {
+        try {
+            return new ResponseEntity<>(priceService.findById(id), HttpStatus.FOUND);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 }

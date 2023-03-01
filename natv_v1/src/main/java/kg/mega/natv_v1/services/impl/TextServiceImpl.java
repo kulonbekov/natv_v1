@@ -17,8 +17,10 @@ public class TextServiceImpl implements TextService {
     @Override
     public TextDto save(TextDto textDto) {
         Text text = textMapper.textDtoToText(textDto);
+        text.setSymbolCount(textDto.getText().replaceAll(" ","").length());
         text = textRep.save(text);
         textDto.setId(text.getId());
+        textDto.setSymbolCount(text.getSymbolCount());
         return textDto;
     }
 

@@ -1,6 +1,7 @@
 package kg.mega.natv_v1.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import kg.mega.natv_v1.models.utils.DateUtil;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -27,4 +28,10 @@ public class Price {
     @ManyToOne
     @JoinColumn(name = "channel_id")
     Channel channel;
+
+    @PrePersist
+    protected void onCreate() {
+        endDate = DateUtil.getINSTANCE().getEndDate();
+        startDate = new Date();
+    }
 }
