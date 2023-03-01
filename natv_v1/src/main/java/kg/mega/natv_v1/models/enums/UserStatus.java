@@ -1,6 +1,6 @@
 package kg.mega.natv_v1.models.enums;
 
 public enum UserStatus {
-    TRUE,
-    FALSE;
+    FALSE,
+    TRUE;
 }
