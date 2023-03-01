@@ -8,7 +8,9 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class BannerDto {
+public class ChannelOrderDto {
     Long id;
-    String file_path;
+    ChannelDto channelDto;
+    OrderDto orderDto;
+    int daysCount;
 }

@@ -20,7 +20,6 @@ public class Price {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     double pricePerSymbol;
-    double bannerPrice;
     @JsonFormat(pattern = "dd.MM.yyyy HH:mm")
     Date startDate;
     @JsonFormat(pattern = "dd.MM.yyyy HH:mm")

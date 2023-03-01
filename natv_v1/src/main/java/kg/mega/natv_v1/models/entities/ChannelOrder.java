@@ -11,11 +11,17 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table(name = "tb_banner")
-public class Banner {
+@Table(name = "tb_channel_order")
+public class ChannelOrder {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    String file_path;
-
+    @ManyToOne
+    @JoinColumn(name = "channel_id")
+    Channel channel;
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    Order order;
+    int daysCount;
 }

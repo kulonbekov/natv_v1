@@ -9,6 +9,7 @@ import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,14 +20,15 @@ public class OrderDto {
     @JsonFormat(pattern = "dd.MM.yyyy HH:mm")
     Date createdDate;
     String clientEmail;
-    String clientFio;
+    String clientFIO;
     String clientPhone;
+
     OrderStatus orderStatus;
+    @JsonProperty(value = "totalPrice")
     double orderSum;
     @JsonProperty(value = "channel")
-    ChannelDto channelDto;
+    List<ChannelDto> channelDto;
     @JsonProperty(value = "text")
     TextDto textDto;
-    @JsonProperty(value = "banner")
-    BannerDto bannerDto;
+
 }

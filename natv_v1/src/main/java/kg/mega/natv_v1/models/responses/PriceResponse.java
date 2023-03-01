@@ -1,6 +1,5 @@
-package kg.mega.natv_v1.models.dtos;
+package kg.mega.natv_v1.models.responses;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,9 +8,11 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class TextDto {
+public class PriceResponse {
 
-    Long id;
     String text;
-    int symbolCount;
+    int daysCount;
+    Long channelId;
+    double price;
+    double priceWithDiscount;
 }

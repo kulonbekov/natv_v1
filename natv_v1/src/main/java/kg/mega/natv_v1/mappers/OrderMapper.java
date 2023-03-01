@@ -12,14 +12,12 @@ public interface OrderMapper {
 
     OrderMapper INSTANCE = Mappers.getMapper(OrderMapper.class);
 
-    @Mapping(source = "channelDto", target = "channel")
+
     @Mapping(source = "textDto", target = "text")
-    @Mapping(source = "bannerDto", target = "banner")
     Order orderDtoToOrder (OrderDto orderDto);
     List<Order> orderDtoToOrderList (List<OrderDto> orderDto);
-    @Mapping(source = "channel", target = "channelDto")
+
     @Mapping(source = "text", target = "textDto")
-    @Mapping(source = "banner", target = "bannerDto")
     OrderDto orderToOrderDto (Order order);
     List<OrderDto> orderToOrderDto (List<Order> order);
 

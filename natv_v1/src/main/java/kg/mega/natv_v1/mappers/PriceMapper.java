@@ -11,6 +11,7 @@ import java.util.List;
 public interface PriceMapper {
 
     PriceMapper INSTANCE = Mappers.getMapper(PriceMapper.class);
+
     @Mapping(source = "channelDto", target = "channel")
     Price priceDtoToPrice (PriceDto priceDto);
     List<Price> priceDtoToPrice (List<PriceDto> priceDto);

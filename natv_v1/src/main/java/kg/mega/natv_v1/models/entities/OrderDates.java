@@ -19,6 +19,6 @@ public class OrderDates {
     Long id;
     Date date;
     @ManyToOne
-    @JoinColumn(name = "order_id")
-    Order order;
+    @JoinColumn(name = "channel_order_id")
+    ChannelOrder channelOrder;
 }

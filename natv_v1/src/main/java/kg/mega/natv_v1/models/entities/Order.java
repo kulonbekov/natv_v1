@@ -7,6 +7,7 @@ import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -22,7 +23,7 @@ public class Order {
     @JsonFormat(pattern = "dd.MM.yyyy HH:mm")
     Date createdDate;
     String clientEmail;
-    String clientFio;
+    String clientFIO;
     String clientPhone;
     OrderStatus orderStatus;
     double orderSum;
@@ -32,9 +33,7 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "text_id")
     Text text;
-    @ManyToOne
-    @JoinColumn(name = "banner_id")
-    Banner banner;
+
 
 
 

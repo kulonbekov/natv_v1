@@ -1,6 +1,6 @@
-package kg.mega.natv_v1.models.dtos;
+package kg.mega.natv_v1.models.requests;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import kg.mega.natv_v1.models.dtos.ChannelDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,9 +9,9 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class TextDto {
+public class PriceRequest {
 
-    Long id;
     String text;
-    int symbolCount;
+    int daysCount;
+    Long channelId;
 }
