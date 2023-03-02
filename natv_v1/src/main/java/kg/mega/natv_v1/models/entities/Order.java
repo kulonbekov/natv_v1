@@ -2,6 +2,7 @@ package kg.mega.natv_v1.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import kg.mega.natv_v1.models.enums.OrderStatus;
+import kg.mega.natv_v1.models.utils.DateUtil;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -33,6 +34,11 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "text_id")
     Text text;
+
+    @PrePersist
+    protected void onCreate() {
+        createdDate = new Date();
+    }
 
 
 

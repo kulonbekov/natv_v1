@@ -2,10 +2,13 @@ package kg.mega.natv_v1.controllers.v1;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import kg.mega.natv_v1.dao.OrderRep;
 import kg.mega.natv_v1.models.dtos.ChannelDto;
 import kg.mega.natv_v1.models.enums.ChannelStatus;
+import kg.mega.natv_v1.models.requests.OrderRequest;
 import kg.mega.natv_v1.models.requests.PriceRequest;
 import kg.mega.natv_v1.services.ChannelService;
+import kg.mega.natv_v1.services.CreateAdService;
 import kg.mega.natv_v1.services.GetPriceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,24 +23,38 @@ public class OperationController {
 
     private final GetPriceService getPriceService;
     private final ChannelService channelService;
+    private final CreateAdService createAdService;
+    private final OrderRep orderRep;
 
-    @PostMapping("/get/price")
+    @PostMapping("/calculate")
     @ApiOperation("Получить стоимости рекламы на одном канале")
-    ResponseEntity<?> getPrice(@RequestBody PriceRequest priceRequest) {
+    ResponseEntity<?> calculate(@RequestBody PriceRequest priceRequest) {
         ChannelDto channelDto = null;
-        try{
+        try {
             channelDto = channelService.findById(priceRequest.getChannelId());
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(400).body("Channel not found");
         }
-        if(channelDto.getChannelStatus().equals(ChannelStatus.TRUE)) {
+        if (channelDto.getChannelStatus().equals(ChannelStatus.TRUE)) {
             try {
-                return ResponseEntity.ok(getPriceService.getPrice(priceRequest));
+                return ResponseEntity.ok(getPriceService.calculate(priceRequest));
             } catch (Exception e) {
                 return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
             }
-        }else{
+        } else {
             return ResponseEntity.status(400).body("Channel is not active");
         }
     }
+    @PostMapping("/createAd")
+    @ApiOperation("Создание заявку на рекламу")
+    ResponseEntity<?> save(@RequestBody OrderRequest orderRequest){
+        try{
+            return ResponseEntity.ok(createAdService.newCreateAd(orderRequest));
+        }catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+            //throw new RuntimeException(e.getMessage());
+            //return ResponseEntity.status(400).body("Error");
+        }
+    }
+
 }
