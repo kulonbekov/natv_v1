@@ -2,13 +2,11 @@ package kg.mega.natv_v1.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import kg.mega.natv_v1.models.enums.OrderStatus;
-import kg.mega.natv_v1.models.utils.DateUtil;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter
@@ -28,9 +26,6 @@ public class Order {
     String clientPhone;
     OrderStatus orderStatus;
     double orderSum;
-    @ManyToOne
-    @JoinColumn(name = "channel_id")
-    Channel channel;
     @ManyToOne
     @JoinColumn(name = "text_id")
     Text text;

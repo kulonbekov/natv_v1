@@ -2,16 +2,17 @@ package kg.mega.natv_v1.services.impl;
 
 import kg.mega.natv_v1.dao.DiscountRep;
 import kg.mega.natv_v1.dao.PriceRep;
+import kg.mega.natv_v1.models.dtos.ChannelOrderDto;
+import kg.mega.natv_v1.models.dtos.OrderDatesDto;
 import kg.mega.natv_v1.models.dtos.OrderDto;
 import kg.mega.natv_v1.models.dtos.TextDto;
 import kg.mega.natv_v1.models.entities.Discount;
+import kg.mega.natv_v1.models.entities.OrderDates;
 import kg.mega.natv_v1.models.enums.OrderStatus;
 import kg.mega.natv_v1.models.requests.OrderRequest;
 import kg.mega.natv_v1.models.responses.ChannelResponse;
 import kg.mega.natv_v1.models.responses.OrderResponse;
-import kg.mega.natv_v1.services.CreateAdService;
-import kg.mega.natv_v1.services.OrderService;
-import kg.mega.natv_v1.services.TextService;
+import kg.mega.natv_v1.services.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,9 @@ public class CreateAdServiceImpl implements CreateAdService {
     private final OrderService orderService;
     private final DiscountRep discountRep;
     private final PriceRep priceRep;
+    private final ChannelOrderService channelOrderService;
+    private final ChannelService channelService;
+    private final OrderDatesService orderDatesService;
 
     @Override
     public OrderResponse newCreateAd(OrderRequest orderRequest) {
@@ -36,7 +40,7 @@ public class CreateAdServiceImpl implements CreateAdService {
         TextDto textDto = new TextDto();
         textDto.setText(orderRequest.getText());
         textDto = textService.save(textDto);
-        System.out.println("Text: " + textDto.getText());
+
 
         OrderDto orderDto = new OrderDto();
         orderDto.setCreatedDate(new Date());
@@ -45,6 +49,7 @@ public class CreateAdServiceImpl implements CreateAdService {
         orderDto.setClientPhone(orderRequest.getClientPhone());
         orderDto.setTextDto(textDto);
         orderDto.setOrderStatus(OrderStatus.CREATED);
+
 
 
 
@@ -71,16 +76,32 @@ public class CreateAdServiceImpl implements CreateAdService {
         }catch(Exception e){
             throw new RuntimeException(e.getMessage());
         }
-        System.out.println("total price: " + totalPrice);
+
         orderDto.setOrderSum(totalPrice);
         orderDto = orderService.save(orderDto);
+
+        for (int i = 0; i < orderRequest.getChannelRequest().size(); i++) {
+            int daysCount = orderRequest.getChannelRequest().get(i).getDateList().size();
+            ChannelOrderDto channelOrderDto = new ChannelOrderDto();
+            channelOrderDto.setDaysCount(daysCount);
+            channelOrderDto.setChannelDto(channelService.findById(orderRequest.getChannelRequest().get(i).getChannelId()));
+            channelOrderDto.setOrderDto(orderDto);
+            channelOrderService.save(channelOrderDto);
+            for (int j = 0; j < orderRequest.getChannelRequest().get(i).getDateList().size(); j++) {
+                OrderDatesDto orderDatesDto = new OrderDatesDto();
+                orderDatesDto.setDate(orderRequest.getChannelRequest().get(i).getDateList().get(j));
+                orderDatesDto.setChannelOrderDto(channelOrderDto);
+                orderDatesService.save(orderDatesDto);
+            }
+
+        }
 
         orderResponse.setClientFIO(orderDto.getClientFIO());
         orderResponse.setClientEmail(orderDto.getClientEmail());
         orderResponse.setClientPhone(orderDto.getClientPhone());
         orderResponse.setText(textDto.getText());
         orderResponse.setOrderStatus(orderDto.getOrderStatus());
-        orderResponse.setTotalPrice(totalPrice);
+        orderResponse.setTotalPrice(orderDto.getOrderSum());
         orderResponse.setChannelResponseList(channelResponses);
 
         return orderResponse;

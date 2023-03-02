@@ -26,8 +26,6 @@ public class OrderDto {
     OrderStatus orderStatus;
     @JsonProperty(value = "totalPrice")
     double orderSum;
-    @JsonProperty(value = "channel")
-    List<ChannelDto> channelDto;
     @JsonProperty(value = "text")
     TextDto textDto;
 

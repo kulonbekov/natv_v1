@@ -17,7 +17,7 @@ public class OrderDatesDto {
     Long id;
     @JsonFormat(pattern = "dd.MM.yyyy")
     @JsonProperty(value = "days")
-    List<Date> dates;
-    @JsonProperty(value = "order")
-    OrderDto orderDto;
+    Date date;
+    @JsonProperty(value = "orderDates")
+    ChannelOrderDto channelOrderDto;
 }
