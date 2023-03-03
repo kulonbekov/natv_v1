@@ -7,6 +7,8 @@ import kg.mega.natv_v1.models.dtos.ChannelDto;
 import kg.mega.natv_v1.models.enums.ChannelStatus;
 import kg.mega.natv_v1.models.requests.OrderRequest;
 import kg.mega.natv_v1.models.requests.PriceRequest;
+import kg.mega.natv_v1.models.responses.ChannelListResponse;
+import kg.mega.natv_v1.services.ChannelListService;
 import kg.mega.natv_v1.services.ChannelService;
 import kg.mega.natv_v1.services.CreateAdService;
 import kg.mega.natv_v1.services.GetPriceService;
@@ -24,7 +26,7 @@ public class OperationController {
     private final GetPriceService getPriceService;
     private final ChannelService channelService;
     private final CreateAdService createAdService;
-    private final OrderRep orderRep;
+    private final ChannelListService channelListService;
 
     @PostMapping("/calculate")
     @ApiOperation("Получить стоимости рекламы на одном канале")
@@ -51,9 +53,17 @@ public class OperationController {
         try{
             return ResponseEntity.ok(createAdService.newCreateAd(orderRequest));
         }catch(Exception e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
-            //throw new RuntimeException(e.getMessage());
-            //return ResponseEntity.status(400).body("Error");
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("/list")
+    @ApiOperation("Получения списка актуальный каналов")
+    ResponseEntity<?> list() {
+        try{
+            return ResponseEntity.ok(channelListService.list());
+        }catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 

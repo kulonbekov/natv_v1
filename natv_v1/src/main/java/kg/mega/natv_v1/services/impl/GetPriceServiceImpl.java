@@ -23,18 +23,18 @@ public class GetPriceServiceImpl implements GetPriceService {
     @Override
     public PriceResponse calculate(PriceRequest priceRequest) {
 
-        List<Discount> discounts = discountRep.getDiscounts(priceRequest.getChannelId());
-        int discount = getDiscount(discounts, priceRequest);
+        List<Discount> discounts = discountRep.getDiscounts(priceRequest.getChannelId()); // Получить актульаные скидки по каналу
+        int discount = getDiscount(discounts, priceRequest); // Проверка для получение скидик по заданному количеству дней
 
-        int symbolCount = (priceRequest.getText().replaceAll(" ", "").length());
-        double price = priceRep.getPrice(priceRequest.getChannelId()).getPricePerSymbol() * symbolCount * priceRequest.getDaysCount();
-        double priceWithDiscount = price - ((price * discount) / 100);
+        int symbolCount = (priceRequest.getText().replaceAll(" ", "").length()); // Подсчитать количество символов в тексте обьявления
+        double price = priceRep.getPrice(priceRequest.getChannelId()).getPricePerSymbol() * symbolCount * priceRequest.getDaysCount(); // Подсчитать общую сумму без скидки
+        double priceWithDiscount = price - ((price * discount) / 100); // Подсчитать общую сумму со скидкой
 
-        return requestMapper.requestToResponse(priceRequest, price, priceWithDiscount);
+        return requestMapper.requestToResponse(priceRequest, price, priceWithDiscount); //Возвращает json "PriceResponse"
 
     }
 
-    private int getDiscount(List<Discount> discounts, PriceRequest priceRequest) {
+    private int getDiscount(List<Discount> discounts, PriceRequest priceRequest) { //Получить из базы текущие скидки по каналу и получить актуальную скидку по заданному количеству дней
         int discount = 0;
 
         for (Discount item : discounts) {
