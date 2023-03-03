@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> findAll() {
-        return null;
+        return userMapper.userToUserDtoList(userRep.findAll());
     }
 
     @Override

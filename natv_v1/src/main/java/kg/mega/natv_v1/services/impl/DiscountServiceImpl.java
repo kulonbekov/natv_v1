@@ -16,7 +16,6 @@ import java.util.List;
 public class DiscountServiceImpl implements DiscountService {
     private final DiscountRep discountRep;
     private final ChannelService channelService;
-    private final ChannelController channelController;
     private final DiscountMapper discountMapper = DiscountMapper.INSTANCE;
     @Override
     public DiscountDto save(DiscountDto discountDto) {
@@ -37,7 +36,7 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public List<DiscountDto> findAll() {
-        return null;
+        return discountMapper.discountToDiscountDtoList(discountRep.findAll());
     }
 
     @Override

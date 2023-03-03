@@ -35,7 +35,7 @@ public class PriceServiceImpl implements PriceService {
 
     @Override
     public List<PriceDto> findAll() {
-        return null;
+        return priceMapper.priceToPriceDtoList(priceRep.findAll());
     }
 
     @Override

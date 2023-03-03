@@ -30,7 +30,7 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public List<ChannelDto> findAll() {
-        return null;
+        return channelMapper.channelToChannelDtoList(channelRep.findAll());
     }
 
     @Override

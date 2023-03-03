@@ -32,7 +32,7 @@ public class TextServiceImpl implements TextService {
 
     @Override
     public List<TextDto> findAll() {
-        return null;
+        return textMapper.textToTextDtoList(textRep.findAll());
     }
 
     @Override

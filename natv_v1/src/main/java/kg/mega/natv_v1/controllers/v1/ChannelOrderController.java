@@ -4,13 +4,16 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import kg.mega.natv_v1.models.dtos.ChannelDto;
 import kg.mega.natv_v1.models.dtos.ChannelOrderDto;
+import kg.mega.natv_v1.models.dtos.PriceDto;
 import kg.mega.natv_v1.services.ChannelOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Api(tags = "Канал и Заказ")
+import java.util.List;
+
+@Api(tags = "8. Канал и Заказ")
 @RestController
 @RequestMapping("/api/v1/channelOrder")
 @RequiredArgsConstructor
@@ -36,5 +39,10 @@ public class ChannelOrderController {
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
+    }
+    @GetMapping("/find/all")
+    @ApiOperation("Вывод всех каналов и заказов")
+    ResponseEntity<List<ChannelOrderDto>> findAll(){
+        return ResponseEntity.ok(channelOrderService.findAll());
     }
 }

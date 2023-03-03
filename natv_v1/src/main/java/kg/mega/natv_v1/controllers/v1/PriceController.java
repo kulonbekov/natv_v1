@@ -4,13 +4,16 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import kg.mega.natv_v1.dao.PriceRep;
 import kg.mega.natv_v1.models.dtos.PriceDto;
+import kg.mega.natv_v1.models.dtos.TextDto;
 import kg.mega.natv_v1.services.PriceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Api(tags = "Стоимость")
+import java.util.List;
+
+@Api(tags = "3. Стоимость")
 @RestController
 @RequestMapping("/api/v1/price")
 @RequiredArgsConstructor
@@ -35,5 +38,11 @@ public class PriceController {
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/find/all")
+    @ApiOperation("Вывод всех цен на рекламу")
+    ResponseEntity<List<PriceDto>> findAll(){
+        return ResponseEntity.ok(priceService.findAll());
     }
 }

@@ -3,13 +3,16 @@ package kg.mega.natv_v1.controllers.v1;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import kg.mega.natv_v1.models.dtos.ChannelDto;
+import kg.mega.natv_v1.models.dtos.PriceDto;
 import kg.mega.natv_v1.services.ChannelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Api(tags = "Каналы")
+import java.util.List;
+
+@Api(tags = "2. Каналы")
 @RestController
 @RequestMapping("/api/v1/channel")
 @RequiredArgsConstructor
@@ -36,4 +39,9 @@ public class ChannelController {
         }
     }
 
+    @GetMapping("/find/all")
+    @ApiOperation("Вывод всех каналов на рекламу")
+    ResponseEntity<List<ChannelDto>> findAll(){
+        return ResponseEntity.ok(channelService.findAll());
+    }
 }

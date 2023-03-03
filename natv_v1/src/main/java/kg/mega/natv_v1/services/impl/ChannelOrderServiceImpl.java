@@ -34,7 +34,7 @@ public class ChannelOrderServiceImpl implements ChannelOrderService {
 
     @Override
     public List<ChannelOrderDto> findAll() {
-        return null;
+        return channelOrderMapper.toDtoList(channelOrderRep.findAll());
     }
 
     @Override

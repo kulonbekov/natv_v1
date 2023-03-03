@@ -32,7 +32,7 @@ public class OrderDatesServiceImpl implements OrderDatesService {
 
     @Override
     public List<OrderDatesDto> findAll() {
-        return null;
+        return orderDatesMapper.orderDatesToOrderDatesDtoList(orderDatesRep.findAll());
     }
 
     @Override

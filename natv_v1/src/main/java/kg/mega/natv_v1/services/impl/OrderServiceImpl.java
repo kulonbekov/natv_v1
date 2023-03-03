@@ -20,11 +20,6 @@ public class OrderServiceImpl implements OrderService {
         order = orderRep.save(order);
         orderDto.setId(order.getId());
         return orderDto;
-
-        /*Order order = orderMapper.orderDtoToOrder(orderDto);
-        order = orderRep.save(order);
-        orderDto.setId(order.getId());
-        return orderDto;*/
     }
 
     @Override
@@ -35,7 +30,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDto> findAll() {
-        return null;
+        return orderMapper.orderToOrderDtoList(orderRep.findAll());
     }
 
     @Override

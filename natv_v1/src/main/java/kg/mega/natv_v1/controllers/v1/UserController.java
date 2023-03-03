@@ -9,7 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Api(tags = "Пользователь")
+import java.util.List;
+
+@Api(tags = "7. Пользователи")
 @RestController
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
@@ -33,5 +35,11 @@ public class UserController {
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/find/all")
+    @ApiOperation("Вывод всех пользователей")
+    ResponseEntity<List<UserDto>> findAll(){
+        return ResponseEntity.ok(userService.findAll());
     }
 }

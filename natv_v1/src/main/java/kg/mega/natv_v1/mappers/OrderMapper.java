@@ -19,7 +19,7 @@ public interface OrderMapper {
 
     @Mapping(source = "text", target = "textDto")
     OrderDto orderToOrderDto (Order order);
-    List<OrderDto> orderToOrderDto (List<Order> order);
+    List<OrderDto> orderToOrderDtoList (List<Order> order);
 
 
 }
