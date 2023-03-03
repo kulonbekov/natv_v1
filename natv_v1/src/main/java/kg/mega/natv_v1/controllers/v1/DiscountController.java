@@ -3,7 +3,6 @@ package kg.mega.natv_v1.controllers.v1;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import kg.mega.natv_v1.models.dtos.DiscountDto;
-import kg.mega.natv_v1.models.dtos.PriceDto;
 import kg.mega.natv_v1.services.DiscountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,28 +18,30 @@ import java.util.List;
 public class DiscountController {
 
     private final DiscountService discountService;
+
     @PostMapping("/save")
     @ApiOperation("Сохранение")
-    ResponseEntity<?> save(@RequestBody DiscountDto discountDto){
-        try{
+    ResponseEntity<?> save(@RequestBody DiscountDto discountDto) {
+        try {
             return new ResponseEntity<>(discountService.save(discountDto), HttpStatus.CREATED);
-        }catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
+
     @GetMapping("/find/by/id")
     @ApiOperation("Поиск скидки по id")
     ResponseEntity<?> findById(@RequestParam Long id) {
         try {
             return new ResponseEntity<>(discountService.findById(id), HttpStatus.FOUND);
-        }catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping("/find/all")
     @ApiOperation("Вывод всех сикдок на рекламу")
-    ResponseEntity<List<DiscountDto>> findAll(){
+    ResponseEntity<List<DiscountDto>> findAll() {
         return ResponseEntity.ok(discountService.findAll());
     }
 

@@ -28,7 +28,7 @@ public class ChannelOrderServiceImpl implements ChannelOrderService {
 
     @Override
     public ChannelOrderDto findById(Long id) {
-        ChannelOrder channelOrder = channelOrderRep.findById(id).orElseThrow(()->new RuntimeException("ChannelOrder not found"));
+        ChannelOrder channelOrder = channelOrderRep.findById(id).orElseThrow(() -> new RuntimeException("ChannelOrder not found"));
         return channelOrderMapper.toDto(channelOrder);
     }
 

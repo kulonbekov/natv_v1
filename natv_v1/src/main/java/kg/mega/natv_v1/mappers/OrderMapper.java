@@ -7,6 +7,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
+
 @Mapper
 public interface OrderMapper {
 
@@ -14,12 +15,14 @@ public interface OrderMapper {
 
 
     @Mapping(source = "textDto", target = "text")
-    Order orderDtoToOrder (OrderDto orderDto);
-    List<Order> orderDtoToOrderList (List<OrderDto> orderDto);
+    Order orderDtoToOrder(OrderDto orderDto);
+
+    List<Order> orderDtoToOrderList(List<OrderDto> orderDto);
 
     @Mapping(source = "text", target = "textDto")
-    OrderDto orderToOrderDto (Order order);
-    List<OrderDto> orderToOrderDtoList (List<Order> order);
+    OrderDto orderToOrderDto(Order order);
+
+    List<OrderDto> orderToOrderDtoList(List<Order> order);
 
 
 }

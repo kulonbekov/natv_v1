@@ -9,11 +9,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ChannelServiceImpl implements ChannelService {
     private final ChannelRep channelRep;
     private final ChannelMapper channelMapper = ChannelMapper.INSTANCE;
+
     @Override
     public ChannelDto save(ChannelDto channelDto) {
         Channel channel = channelMapper.channelDtoToChannel(channelDto);
@@ -24,7 +26,7 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public ChannelDto findById(Long id) {
-        Channel channel = channelRep.findById(id).orElseThrow(()->new RuntimeException("Channel not found"));
+        Channel channel = channelRep.findById(id).orElseThrow(() -> new RuntimeException("Channel not found"));
         return channelMapper.channelToChannelDto(channel);
     }
 

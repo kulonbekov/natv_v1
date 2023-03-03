@@ -27,14 +27,14 @@ public class ChannelListServiceImpl implements ChannelListService {
         List<ChannelListResponse> channelListResponses = new ArrayList<>();
         List<Channel> channels = channelRep.findAllByActive(); // Получить все активные каналы
 
-        for (Channel item: channels) {
+        for (Channel item : channels) {
 
             ChannelListResponse channelListResponse = new ChannelListResponse();
             channelListResponse.setChannelName(item.getChannelName());
             channelListResponse.setLogoPath(item.getLogoPath());
 
-            if(priceRep.getPrice(item.getId()) != null){ // Проверить по текущему каналу ,активные цены на рекламу
-                if(getDiscount(item.getId()) != null){  // Проверить по текущему каналу ,активные скидки на рекламу
+            if (priceRep.getPrice(item.getId()) != null) { // Проверить по текущему каналу ,активные цены на рекламу
+                if (getDiscount(item.getId()) != null) {  // Проверить по текущему каналу ,активные скидки на рекламу
                     channelListResponse.setPricePerSymbol(priceRep.getPrice(item.getId()).getPricePerSymbol());
                     channelListResponse.setDiscountResponses(getDiscount(item.getId()));
 
@@ -49,9 +49,9 @@ public class ChannelListServiceImpl implements ChannelListService {
         List<Discount> discounts = discountRep.getDiscounts(id);
         List<DiscountResponse> newDiscounts = new ArrayList<>();
 
-        for (Discount item: discounts) {
-            if(item.getStartDate().before(new Date()) &&
-                    item.getEndDate().after(new Date())){
+        for (Discount item : discounts) {
+            if (item.getStartDate().before(new Date()) &&
+                    item.getEndDate().after(new Date())) {
                 DiscountResponse discountResponse = new DiscountResponse();
                 discountResponse.setDiscount(item.getDiscount());
                 discountResponse.setDiscountDays(item.getDiscountDays());

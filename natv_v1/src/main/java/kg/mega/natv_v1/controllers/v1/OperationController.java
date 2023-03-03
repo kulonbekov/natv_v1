@@ -2,12 +2,10 @@ package kg.mega.natv_v1.controllers.v1;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import kg.mega.natv_v1.dao.OrderRep;
 import kg.mega.natv_v1.models.dtos.ChannelDto;
 import kg.mega.natv_v1.models.enums.ChannelStatus;
 import kg.mega.natv_v1.models.requests.OrderRequest;
 import kg.mega.natv_v1.models.requests.PriceRequest;
-import kg.mega.natv_v1.models.responses.ChannelListResponse;
 import kg.mega.natv_v1.services.ChannelListService;
 import kg.mega.natv_v1.services.ChannelService;
 import kg.mega.natv_v1.services.CreateAdService;
@@ -15,7 +13,10 @@ import kg.mega.natv_v1.services.GetPriceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Api(tags = "1. Операции")
 @RestController
@@ -47,12 +48,13 @@ public class OperationController {
             return ResponseEntity.status(400).body("Channel is not active");
         }
     }
+
     @PostMapping("/createAd")
     @ApiOperation("Создание заявку на рекламу")
-    ResponseEntity<?> save(@RequestBody OrderRequest orderRequest){
-        try{
+    ResponseEntity<?> save(@RequestBody OrderRequest orderRequest) {
+        try {
             return ResponseEntity.ok(createAdService.newCreateAd(orderRequest));
-        }catch(Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
@@ -60,9 +62,9 @@ public class OperationController {
     @PostMapping("/list")
     @ApiOperation("Получения списка актуальный каналов")
     ResponseEntity<?> list() {
-        try{
+        try {
             return ResponseEntity.ok(channelListService.list());
-        }catch(Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }

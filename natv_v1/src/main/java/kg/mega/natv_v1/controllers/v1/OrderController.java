@@ -3,7 +3,6 @@ package kg.mega.natv_v1.controllers.v1;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import kg.mega.natv_v1.models.dtos.OrderDto;
-import kg.mega.natv_v1.models.dtos.PriceDto;
 import kg.mega.natv_v1.services.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,26 +20,27 @@ public class OrderController {
 
     @PostMapping("/save")
     @ApiOperation("Сохранение")
-    ResponseEntity<?> save(@RequestBody OrderDto orderDto){
-        try{
+    ResponseEntity<?> save(@RequestBody OrderDto orderDto) {
+        try {
             return new ResponseEntity<>(orderService.save(orderDto), HttpStatus.CREATED);
-        }catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
     }
+
     @GetMapping("/find/by/id")
     @ApiOperation("Поиск заказа по id")
     ResponseEntity<?> findById(@RequestParam Long id) {
         try {
             return new ResponseEntity<>(orderService.findById(id), HttpStatus.FOUND);
-        }catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping("/find/all")
     @ApiOperation("Вывод всех заказов на рекламу")
-    ResponseEntity<List<OrderDto>> findAll(){
+    ResponseEntity<List<OrderDto>> findAll() {
         return ResponseEntity.ok(orderService.findAll());
     }
 }

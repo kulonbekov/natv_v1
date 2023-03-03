@@ -20,26 +20,27 @@ public class UserController {
 
     @PostMapping("/save")
     @ApiOperation("Сохранение")
-    ResponseEntity<?> save(@RequestBody UserDto userDto){
-        try{
+    ResponseEntity<?> save(@RequestBody UserDto userDto) {
+        try {
             return new ResponseEntity<>(userService.save(userDto), HttpStatus.CREATED);
-        }catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
     }
+
     @GetMapping("/find/by/id")
     @ApiOperation("Поиск пользователя по id")
     ResponseEntity<?> findById(@RequestParam Long id) {
         try {
             return new ResponseEntity<>(userService.findById(id), HttpStatus.FOUND);
-        }catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping("/find/all")
     @ApiOperation("Вывод всех пользователей")
-    ResponseEntity<List<UserDto>> findAll(){
+    ResponseEntity<List<UserDto>> findAll() {
         return ResponseEntity.ok(userService.findAll());
     }
 }

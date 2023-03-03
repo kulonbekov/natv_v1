@@ -10,12 +10,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class PriceServiceImpl implements PriceService {
     private final PriceRep priceRep;
     private final ChannelService channelService;
     private final PriceMapper priceMapper = PriceMapper.INSTANCE;
+
     @Override
     public PriceDto save(PriceDto priceDto) {
         Price price = priceMapper.priceDtoToPrice(priceDto);
@@ -29,7 +31,7 @@ public class PriceServiceImpl implements PriceService {
 
     @Override
     public PriceDto findById(Long id) {
-        Price price = priceRep.findById(id).orElseThrow(()->new RuntimeException("Price not found"));
+        Price price = priceRep.findById(id).orElseThrow(() -> new RuntimeException("Price not found"));
         return priceMapper.priceToPriceDto(price);
     }
 

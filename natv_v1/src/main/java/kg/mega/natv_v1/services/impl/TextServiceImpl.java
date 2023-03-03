@@ -9,15 +9,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class TextServiceImpl implements TextService {
     private final TextRep textRep;
     private final TextMapper textMapper = TextMapper.INSTANCE;
+
     @Override
     public TextDto save(TextDto textDto) {
         Text text = textMapper.textDtoToText(textDto);
-        text.setSymbolCount(textDto.getText().replaceAll(" ","").length());
+        text.setSymbolCount(textDto.getText().replaceAll(" ", "").length());
         text = textRep.save(text);
         textDto.setId(text.getId());
         textDto.setSymbolCount(text.getSymbolCount());
@@ -26,7 +28,7 @@ public class TextServiceImpl implements TextService {
 
     @Override
     public TextDto findById(Long id) {
-        Text text = textRep.findById(id).orElseThrow(()->new RuntimeException("Text not found"));
+        Text text = textRep.findById(id).orElseThrow(() -> new RuntimeException("Text not found"));
         return textMapper.textToTextDto(text);
     }
 

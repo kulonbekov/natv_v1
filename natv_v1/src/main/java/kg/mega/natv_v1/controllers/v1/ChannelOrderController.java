@@ -2,9 +2,7 @@ package kg.mega.natv_v1.controllers.v1;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import kg.mega.natv_v1.models.dtos.ChannelDto;
 import kg.mega.natv_v1.models.dtos.ChannelOrderDto;
-import kg.mega.natv_v1.models.dtos.PriceDto;
 import kg.mega.natv_v1.services.ChannelOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,10 +21,10 @@ public class ChannelOrderController {
 
     @PostMapping("/save")
     @ApiOperation("Сохранение")
-    ResponseEntity<?> save(@RequestBody ChannelOrderDto channelOrderDto){
-        try{
+    ResponseEntity<?> save(@RequestBody ChannelOrderDto channelOrderDto) {
+        try {
             return new ResponseEntity<>(channelOrderService.save(channelOrderDto), HttpStatus.CREATED);
-        }catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
     }
@@ -36,13 +34,14 @@ public class ChannelOrderController {
     ResponseEntity<?> findById(@RequestParam Long id) {
         try {
             return new ResponseEntity<>(channelOrderService.findById(id), HttpStatus.FOUND);
-        }catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
+
     @GetMapping("/find/all")
     @ApiOperation("Вывод всех каналов и заказов")
-    ResponseEntity<List<ChannelOrderDto>> findAll(){
+    ResponseEntity<List<ChannelOrderDto>> findAll() {
         return ResponseEntity.ok(channelOrderService.findAll());
     }
 }

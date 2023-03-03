@@ -73,9 +73,9 @@ public class CreateAdServiceImpl implements CreateAdService {
     private void saveChannelOrder(OrderRequest orderRequest, OrderDto orderDto) { //Сохранение нового записа в промежуточную таблицу "tb_channel_order" и сохранение записей дат в таблицу "tb_order_dates"
         for (int i = 0; i < orderRequest.getChannelRequest().size(); i++) {
             ChannelDto channelDto = channelService.findById(orderRequest.getChannelRequest().get(i).getChannelId());
-            ChannelOrderDto channelOrderDto = channelOrderService.save(requestMapper.getChannelOrderDto(channelDto,orderDto,orderRequest,i));
+            ChannelOrderDto channelOrderDto = channelOrderService.save(requestMapper.getChannelOrderDto(channelDto, orderDto, orderRequest, i));
             for (int j = 0; j < orderRequest.getChannelRequest().get(i).getDateList().size(); j++) {
-                orderDatesService.save(requestMapper.getOrderDatesDto(orderRequest,channelOrderDto,i,j));
+                orderDatesService.save(requestMapper.getOrderDatesDto(orderRequest, channelOrderDto, i, j));
             }
         }
     }

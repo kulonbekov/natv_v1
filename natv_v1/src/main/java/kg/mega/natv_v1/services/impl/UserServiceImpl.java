@@ -9,11 +9,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRep userRep;
     private final UserMapper userMapper = UserMapper.INSTANCE;
+
     @Override
     public UserDto save(UserDto userDto) {
         User user = userMapper.userDtoToUser(userDto);
@@ -24,7 +26,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto findById(Long id) {
-        User user = userRep.findById(id).orElseThrow(()->new RuntimeException("User not found"));
+        User user = userRep.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
         return userMapper.userToUserDto(user);
     }
 

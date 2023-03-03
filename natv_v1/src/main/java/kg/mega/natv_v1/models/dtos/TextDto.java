@@ -1,6 +1,5 @@
 package kg.mega.natv_v1.models.dtos;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;

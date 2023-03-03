@@ -9,11 +9,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final OrderRep orderRep;
     private final OrderMapper orderMapper = OrderMapper.INSTANCE;
+
     @Override
     public OrderDto save(OrderDto orderDto) {
         Order order = orderMapper.orderDtoToOrder(orderDto);
@@ -24,7 +26,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto findById(Long id) {
-        Order order = orderRep.findById(id).orElseThrow(()->new RuntimeException("Order not found"));
+        Order order = orderRep.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
         return orderMapper.orderToOrderDto(order);
     }
 

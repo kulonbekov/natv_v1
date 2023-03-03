@@ -4,7 +4,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import kg.mega.natv_v1.dao.PriceRep;
 import kg.mega.natv_v1.models.dtos.PriceDto;
-import kg.mega.natv_v1.models.dtos.TextDto;
 import kg.mega.natv_v1.services.PriceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,26 +22,27 @@ public class PriceController {
 
     @PostMapping("/save")
     @ApiOperation("Сохранение")
-    ResponseEntity<?> save(@RequestBody PriceDto priceDto){
-        try{
+    ResponseEntity<?> save(@RequestBody PriceDto priceDto) {
+        try {
             return new ResponseEntity<>(priceService.save(priceDto), HttpStatus.CREATED);
-        }catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
+
     @GetMapping("/find/by/id")
     @ApiOperation("Поиск стоимость по id")
     ResponseEntity<?> findById(@RequestParam Long id) {
         try {
             return new ResponseEntity<>(priceService.findById(id), HttpStatus.FOUND);
-        }catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping("/find/all")
     @ApiOperation("Вывод всех цен на рекламу")
-    ResponseEntity<List<PriceDto>> findAll(){
+    ResponseEntity<List<PriceDto>> findAll() {
         return ResponseEntity.ok(priceService.findAll());
     }
 }

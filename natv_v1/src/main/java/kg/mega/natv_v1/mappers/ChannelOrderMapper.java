@@ -16,14 +16,16 @@ public interface ChannelOrderMapper {
     @Mapping(source = "channelDto", target = "channel")
     @Mapping(source = "orderDto", target = "order")
     @Mapping(source = "orderDto.textDto", target = "order.text")
-    ChannelOrder DtoTo (ChannelOrderDto channelOrderDto);
-    List<ChannelOrder> DtoToList (List<ChannelOrderDto> channelOrderDto);
+    ChannelOrder DtoTo(ChannelOrderDto channelOrderDto);
+
+    List<ChannelOrder> DtoToList(List<ChannelOrderDto> channelOrderDto);
+
     @Mapping(source = "channel", target = "channelDto")
     @Mapping(source = "order", target = "orderDto")
     @Mapping(source = "order.text", target = "orderDto.textDto")
-    ChannelOrderDto toDto (ChannelOrder channelOrder);
-    List<ChannelOrderDto> toDtoList (List<ChannelOrder> channelOrder);
+    ChannelOrderDto toDto(ChannelOrder channelOrder);
 
+    List<ChannelOrderDto> toDtoList(List<ChannelOrder> channelOrder);
 
 
 }

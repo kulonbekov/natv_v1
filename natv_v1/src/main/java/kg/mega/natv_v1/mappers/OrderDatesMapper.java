@@ -17,14 +17,17 @@ public interface OrderDatesMapper {
     @Mapping(source = "channelOrderDto.channelDto", target = "channelOrder.channel")
     @Mapping(source = "channelOrderDto.orderDto", target = "channelOrder.order")
     @Mapping(source = "channelOrderDto.orderDto.textDto", target = "channelOrder.order.text")
-    OrderDates orderDatesDtoToOrderDates (OrderDatesDto orderDatesDto);
-    List<OrderDates> orderDatesDtoToOrderDatesList (List<OrderDatesDto> orderDatesDto);
+    OrderDates orderDatesDtoToOrderDates(OrderDatesDto orderDatesDto);
+
+    List<OrderDates> orderDatesDtoToOrderDatesList(List<OrderDatesDto> orderDatesDto);
+
     @Mapping(source = "channelOrder", target = "channelOrderDto")
     @Mapping(source = "channelOrder.channel", target = "channelOrderDto.channelDto")
     @Mapping(source = "channelOrder.order", target = "channelOrderDto.orderDto")
     @Mapping(source = "channelOrder.order.text", target = "channelOrderDto.orderDto.textDto")
-    OrderDatesDto orderDatesToOrderDatesDto (OrderDates orderDates);
-    List<OrderDatesDto> orderDatesToOrderDatesDtoList (List<OrderDates> orderDates);
+    OrderDatesDto orderDatesToOrderDatesDto(OrderDates orderDates);
+
+    List<OrderDatesDto> orderDatesToOrderDatesDtoList(List<OrderDates> orderDates);
 
 
 }
