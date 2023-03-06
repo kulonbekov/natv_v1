@@ -2,13 +2,16 @@ package kg.mega.natv_v1.services.impl;
 
 import kg.mega.natv_v1.dao.PriceRep;
 import kg.mega.natv_v1.mappers.PriceMapper;
+import kg.mega.natv_v1.mappers.PriceSaveMapper;
 import kg.mega.natv_v1.models.dtos.PriceDto;
+import kg.mega.natv_v1.models.entities.Channel;
 import kg.mega.natv_v1.models.entities.Price;
 import kg.mega.natv_v1.services.ChannelService;
 import kg.mega.natv_v1.services.PriceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -17,6 +20,7 @@ public class PriceServiceImpl implements PriceService {
     private final PriceRep priceRep;
     private final ChannelService channelService;
     private final PriceMapper priceMapper = PriceMapper.INSTANCE;
+    private final PriceSaveMapper priceSaveMapper;
 
     @Override
     public PriceDto save(PriceDto priceDto) {
@@ -48,5 +52,22 @@ public class PriceServiceImpl implements PriceService {
     @Override
     public PriceDto delete(Long id) {
         return null;
+    }
+
+    @Override
+    public Long update(Long priceId, double pricePerLetter, Channel channel) {
+        Price currentPrice = priceRep.findById(priceId).orElseThrow(()->new RuntimeException("Price not found"));
+
+        if(currentPrice.getPricePerSymbol()==pricePerLetter){
+            return priceId;
+        }
+
+        currentPrice.setEndDate(new Date());
+        priceRep.save(currentPrice);
+
+        Price price = priceSaveMapper.toPrice(pricePerLetter,channel);
+        Long newPriceId = priceRep.save(price).getId();
+
+        return newPriceId;
     }
 }

@@ -7,11 +7,14 @@ import kg.mega.natv_v1.models.dtos.DiscountDto;
 import kg.mega.natv_v1.models.entities.Channel;
 import kg.mega.natv_v1.models.entities.Discount;
 import kg.mega.natv_v1.models.responses.DiscountSaveResponse;
+import kg.mega.natv_v1.models.utils.DateUtil;
 import kg.mega.natv_v1.services.ChannelService;
 import kg.mega.natv_v1.services.DiscountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -60,4 +63,25 @@ public class DiscountServiceImpl implements DiscountService {
         discountList = discountRep.saveAll(discountList);
         return discountSaveMapper.toDiscountSaveList(discountList);
     }
+
+    @Override
+    public List<DiscountSaveResponse> update(List<DiscountSaveResponse> discounts, Channel channel) {
+
+        List<Discount> currentDiscounts = discountRep.findAllByChannelAndEndDate(channel, DateUtil.getINSTANCE().getEndDate());
+        List<Discount> discountForDelete = new ArrayList<>();
+
+        for(Discount discount: currentDiscounts){
+            for(DiscountSaveResponse discountDto: discounts){
+                if(!discount.getId().equals(discountDto.getId())){
+                    discount.setEndDate(new Date());
+                    discountForDelete.add(discount);
+                    break;
+                }
+            }
+        }
+        discountRep.saveAll(discountForDelete);
+        return saveAll(discounts, channel);
+    }
+
+
 }

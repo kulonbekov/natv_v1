@@ -15,6 +15,7 @@ import kg.mega.natv_v1.models.enums.ChannelStatus;
 import kg.mega.natv_v1.models.responses.ChannelListResponse;
 import kg.mega.natv_v1.models.responses.ChannelSaveResponse;
 import kg.mega.natv_v1.models.responses.DiscountResponse;
+import kg.mega.natv_v1.models.responses.DiscountSaveResponse;
 import kg.mega.natv_v1.services.ChannelListService;
 import kg.mega.natv_v1.services.DiscountService;
 import kg.mega.natv_v1.services.PriceService;
@@ -34,8 +35,8 @@ public class ChannelListServiceImpl implements ChannelListService {
     private final RequestMapper requestMapper;
     private final PriceMapper priceMapper = PriceMapper.INSTANCE;
     private final DiscountService discountService;
-    private final PriceService priceService;
     private final PriceSaveMapper priceSaveMapper;
+    private final PriceService priceService;
 
     @Override
     public List<ChannelListResponse> list() {
@@ -74,6 +75,22 @@ public class ChannelListServiceImpl implements ChannelListService {
         channelDto.setPriceId(priceDto.getId());
 
         channelDto.setDiscountSaveResponses(discountService.saveAll(channelDto.getDiscountSaveResponses(),channel));
+
+        return channelDto;
+    }
+
+    @Override
+    public ChannelSaveResponse update(ChannelSaveResponse channelDto) {
+
+        Channel channel = channelRep.findById(channelDto.getId()).orElseThrow(()->new RuntimeException("Channel not found"));
+        channel = requestMapper.channelSaveResponseToChannel(channelDto);
+        channel = channelRep.save(channel);
+
+        Long priceId = priceService.update(channelDto.getPriceId(),channelDto.getPricePerSymbol(),channel);
+        channelDto.setPriceId(priceId);
+
+        List<DiscountSaveResponse> discountDtos = discountService.update(channelDto.getDiscountSaveResponses(), channel);
+        channelDto.setDiscountSaveResponses(discountDtos);
 
         return channelDto;
     }

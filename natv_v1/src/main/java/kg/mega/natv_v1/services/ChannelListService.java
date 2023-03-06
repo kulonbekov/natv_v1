@@ -10,4 +10,5 @@ public interface ChannelListService {
     List<ChannelListResponse> list();
 
     ChannelSaveResponse save(ChannelSaveResponse channelDto);
+    ChannelSaveResponse update(ChannelSaveResponse channelDto);
 }

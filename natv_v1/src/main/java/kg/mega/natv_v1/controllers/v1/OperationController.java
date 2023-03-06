@@ -70,7 +70,7 @@ public class OperationController {
         }
     }
     @PostMapping("/save")
-    @ApiOperation("Сохранения канала")
+    @ApiOperation("Создание канала")
     ResponseEntity<?> save (@RequestBody ChannelSaveResponse channelDto){
         try {
             return ResponseEntity.ok(channelListService.save(channelDto));
@@ -78,5 +78,15 @@ public class OperationController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
     }
+    @PostMapping("/update")
+    @ApiOperation("Редактирование канала")
+    ResponseEntity<?> update (@RequestBody ChannelSaveResponse channelDto){
+        try {
+            return ResponseEntity.ok(channelListService.update(channelDto));
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
 
 }

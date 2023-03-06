@@ -27,7 +27,7 @@ public class ChannelSaveResponse {
     ChannelStatus channelStatus;
     @JsonProperty(value = "logo")
     String logoPath;
-    @JsonIgnore
+    @JsonProperty(value = "price_id")
     Long priceId;
     @JsonProperty(value = "price_per_letter")
     double pricePerSymbol;

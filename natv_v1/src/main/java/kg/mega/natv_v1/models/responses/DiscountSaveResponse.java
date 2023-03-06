@@ -11,6 +11,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class DiscountSaveResponse {
 
+    @JsonProperty("discount_id")
     Long id;
     int discount;
     @JsonProperty(value = "from_days_count")

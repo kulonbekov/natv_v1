@@ -9,4 +9,5 @@ import java.util.List;
 public interface DiscountService extends BaseService<DiscountDto> {
 
     List<DiscountSaveResponse> saveAll(List<DiscountSaveResponse> discounts, Channel channel);
+    List<DiscountSaveResponse> update(List<DiscountSaveResponse> discounts, Channel channel);
 }
