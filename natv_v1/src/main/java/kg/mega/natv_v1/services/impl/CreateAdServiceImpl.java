@@ -41,10 +41,11 @@ public class CreateAdServiceImpl implements CreateAdService {
     public OrderResponse newCreateAd(OrderRequest orderRequest) {
 
         TextDto textDto = getTextDto(orderRequest); //Сохранение нового записа в таблицу tb_text "Текст обьявления"
-        orderDto = orderService.save(requestMapper.orderRequestToOrder(orderRequest, textDto, totalPrice)); // Создание и сохрание нового записа в таблицу "tb_order"
+
 
         try {
             channelResponses = saveChannelResponse(orderRequest, textDto); // сформировать json для ChannelResponse
+            orderDto = orderService.save(requestMapper.orderRequestToOrder(orderRequest, textDto, totalPrice)); // Создание и сохрание нового записа в таблицу "tb_order"
             saveChannelOrder(orderRequest, orderDto); //Сохранение нового записа в промежуточную таблицу "tb_channel_order" и сохранение записей дат в таблицу "tb_order_dates"
         } catch (Exception e) {
             System.out.println(e.getMessage() + " " + e.toString());
