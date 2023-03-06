@@ -2,6 +2,7 @@ package kg.mega.natv_v1.services.impl;
 
 import kg.mega.natv_v1.dao.DiscountRep;
 import kg.mega.natv_v1.dao.PriceRep;
+import kg.mega.natv_v1.mappers.OrderEmailMapper;
 import kg.mega.natv_v1.mappers.RequestMapper;
 import kg.mega.natv_v1.models.dtos.ChannelDto;
 import kg.mega.natv_v1.models.dtos.ChannelOrderDto;
@@ -30,14 +31,17 @@ public class CreateAdServiceImpl implements CreateAdService {
     private final OrderDatesService orderDatesService;
     private final RequestMapper requestMapper;
     private final TextService textService;
+    private final OrderEmailMapper orderEmailMapper;
+    private final EmailService emailService;
     double totalPrice = 0.0;
     List<ChannelResponse> channelResponses = new ArrayList<>();
+    OrderDto orderDto = new OrderDto();
 
     @Override
     public OrderResponse newCreateAd(OrderRequest orderRequest) {
 
         TextDto textDto = getTextDto(orderRequest); //Сохранение нового записа в таблицу tb_text "Текст обьявления"
-        OrderDto orderDto = orderService.save(requestMapper.orderRequestToOrder(orderRequest, textDto, totalPrice)); // Создание и сохрание нового записа в таблицу "tb_order"
+        orderDto = orderService.save(requestMapper.orderRequestToOrder(orderRequest, textDto, totalPrice)); // Создание и сохрание нового записа в таблицу "tb_order"
 
         try {
             channelResponses = saveChannelResponse(orderRequest, textDto); // сформировать json для ChannelResponse
@@ -46,8 +50,22 @@ public class CreateAdServiceImpl implements CreateAdService {
             System.out.println(e.getMessage() + " " + e.toString());
             throw new RuntimeException("Ошибка при сохранения ");
         }
+        OrderResponse orderResponse = requestMapper.getOrderResponse(orderDto, textDto, channelResponses);
+        settingEmail(orderResponse);
+        return  orderResponse; //возвращает json для "orderResponse"
+    }
 
-        return requestMapper.getOrderResponse(orderDto, textDto, channelResponses); //возвращает json для "orderResponse"
+    @Override
+    public void settingEmail(OrderResponse orderResponse) {
+        String email = orderResponse.getClientEmail();
+        String subject = "Advertising" + new Date();
+        String text = orderEmailMapper.orderResponseToString(orderResponse);
+
+        try{
+            emailService.send(email,subject,text);
+        }catch (Exception e){
+            e.getMessage();
+        }
     }
 
     private TextDto getTextDto(OrderRequest orderRequest) { //Сохранение нового записа в таблицу tb_text "Текст обьявления"
