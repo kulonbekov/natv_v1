@@ -69,10 +69,8 @@ public class ChannelListServiceImpl implements ChannelListService {
         channelDto.setId(channel.getId());
         channelDto.setChannelStatus(channel.getChannelStatus());
 
-        Price price = priceSaveMapper.toPrice(channelDto.getPricePerSymbol(),channel);
-        price = priceRep.save(price);
-        PriceDto priceDto = priceMapper.priceToPriceDto(price);
-        channelDto.setPriceId(priceDto.getId());
+        Long priceId = priceService.save(channelDto.getPricePerSymbol(),channel);
+        channelDto.setPriceId(priceId);
 
         channelDto.setDiscountSaveResponses(discountService.saveAll(channelDto.getDiscountSaveResponses(),channel));
 

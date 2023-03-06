@@ -55,6 +55,13 @@ public class PriceServiceImpl implements PriceService {
     }
 
     @Override
+    public Long save(double pricePerLetter, Channel channel) {
+        Price price = priceSaveMapper.toPrice(pricePerLetter,channel);
+        price = priceRep.save(price);
+        return price.getId();
+    }
+
+    @Override
     public Long update(Long priceId, double pricePerLetter, Channel channel) {
         Price currentPrice = priceRep.findById(priceId).orElseThrow(()->new RuntimeException("Price not found"));
 
