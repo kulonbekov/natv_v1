@@ -4,6 +4,7 @@ import kg.mega.natv_v1.dao.UserRep;
 import kg.mega.natv_v1.mappers.UserMapper;
 import kg.mega.natv_v1.models.dtos.UserDto;
 import kg.mega.natv_v1.models.entities.User;
+import kg.mega.natv_v1.models.enums.UserStatus;
 import kg.mega.natv_v1.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto delete(Long id) {
-        return null;
+        UserDto userDto = findById(id);
+        userDto.setUserStatus(UserStatus.FALSE);
+        return save(userDto);
     }
 }

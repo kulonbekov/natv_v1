@@ -4,6 +4,7 @@ import kg.mega.natv_v1.dao.ChannelRep;
 import kg.mega.natv_v1.mappers.ChannelMapper;
 import kg.mega.natv_v1.models.dtos.ChannelDto;
 import kg.mega.natv_v1.models.entities.Channel;
+import kg.mega.natv_v1.models.enums.ChannelStatus;
 import kg.mega.natv_v1.services.ChannelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,8 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public ChannelDto delete(Long id) {
-        return null;
+        ChannelDto channelDto = findById(id);
+        channelDto.setChannelStatus(ChannelStatus.FALSE);
+        return save(channelDto);
     }
 }
