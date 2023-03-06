@@ -3,11 +3,21 @@ package kg.mega.natv_v1.services.impl;
 import kg.mega.natv_v1.dao.ChannelRep;
 import kg.mega.natv_v1.dao.DiscountRep;
 import kg.mega.natv_v1.dao.PriceRep;
+import kg.mega.natv_v1.mappers.PriceMapper;
+import kg.mega.natv_v1.mappers.PriceSaveMapper;
+import kg.mega.natv_v1.mappers.RequestMapper;
+import kg.mega.natv_v1.models.dtos.ChannelDto;
+import kg.mega.natv_v1.models.dtos.PriceDto;
 import kg.mega.natv_v1.models.entities.Channel;
 import kg.mega.natv_v1.models.entities.Discount;
+import kg.mega.natv_v1.models.entities.Price;
+import kg.mega.natv_v1.models.enums.ChannelStatus;
 import kg.mega.natv_v1.models.responses.ChannelListResponse;
+import kg.mega.natv_v1.models.responses.ChannelSaveResponse;
 import kg.mega.natv_v1.models.responses.DiscountResponse;
 import kg.mega.natv_v1.services.ChannelListService;
+import kg.mega.natv_v1.services.DiscountService;
+import kg.mega.natv_v1.services.PriceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +31,11 @@ public class ChannelListServiceImpl implements ChannelListService {
     private final ChannelRep channelRep;
     private final PriceRep priceRep;
     private final DiscountRep discountRep;
+    private final RequestMapper requestMapper;
+    private final PriceMapper priceMapper = PriceMapper.INSTANCE;
+    private final DiscountService discountService;
+    private final PriceService priceService;
+    private final PriceSaveMapper priceSaveMapper;
 
     @Override
     public List<ChannelListResponse> list() {
@@ -44,6 +59,25 @@ public class ChannelListServiceImpl implements ChannelListService {
         }
         return channelListResponses;
     }
+
+    @Override
+    public ChannelSaveResponse save(ChannelSaveResponse channelDto) {
+
+        Channel channel = requestMapper.channelSaveResponseToChannel(channelDto);
+        channel = channelRep.save(channel);
+        channelDto.setId(channel.getId());
+        channelDto.setChannelStatus(channel.getChannelStatus());
+
+        Price price = priceSaveMapper.toPrice(channelDto.getPricePerSymbol(),channel);
+        price = priceRep.save(price);
+        PriceDto priceDto = priceMapper.priceToPriceDto(price);
+        channelDto.setPriceId(priceDto.getId());
+
+        channelDto.setDiscountSaveResponses(discountService.saveAll(channelDto.getDiscountSaveResponses(),channel));
+
+        return channelDto;
+    }
+
 
     private List<DiscountResponse> getDiscount(Long id) { //Проверить и получить по текущему каналу ,активные скидки на рекламу
         List<Discount> discounts = discountRep.getDiscounts(id);

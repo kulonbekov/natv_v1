@@ -1,13 +1,15 @@
 package kg.mega.natv_v1.mappers.impl;
 
+import kg.mega.natv_v1.dao.ChannelOrderRep;
+import kg.mega.natv_v1.dao.ChannelRep;
 import kg.mega.natv_v1.mappers.RequestMapper;
 import kg.mega.natv_v1.models.dtos.*;
+import kg.mega.natv_v1.models.entities.Channel;
+import kg.mega.natv_v1.models.enums.ChannelStatus;
 import kg.mega.natv_v1.models.enums.OrderStatus;
 import kg.mega.natv_v1.models.requests.OrderRequest;
 import kg.mega.natv_v1.models.requests.PriceRequest;
-import kg.mega.natv_v1.models.responses.ChannelResponse;
-import kg.mega.natv_v1.models.responses.OrderResponse;
-import kg.mega.natv_v1.models.responses.PriceResponse;
+import kg.mega.natv_v1.models.responses.*;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -15,6 +17,15 @@ import java.util.List;
 
 @Service
 public class RequestMapperImpl implements RequestMapper {
+    private final ChannelRep channelRep;
+    private final ChannelOrderRep channelOrderRep;
+
+    public RequestMapperImpl(ChannelRep channelRep,
+                             ChannelOrderRep channelOrderRep) {
+        this.channelRep = channelRep;
+        this.channelOrderRep = channelOrderRep;
+    }
+
     @Override
     public OrderDto orderRequestToOrder(OrderRequest orderRequest, TextDto textDto, double totalPrice) {
 
@@ -71,4 +82,19 @@ public class RequestMapperImpl implements RequestMapper {
         channelOrderDto.setOrderDto(orderDto);
         return channelOrderDto;
     }
+
+    @Override
+    public Channel channelSaveResponseToChannel(ChannelSaveResponse channelDto) {
+
+        Channel channel = new Channel();
+        channel.setId(channelDto.getId());
+        channel.setChannelName(channelDto.getChannelName());
+        channel.setChannelStatus(ChannelStatus.TRUE);
+        channel.setCreatedDate(new Date());
+        channel.setLogoPath(channelDto.getLogoPath());
+
+        return channel;
+    }
+
+
 }

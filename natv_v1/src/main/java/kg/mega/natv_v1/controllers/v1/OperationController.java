@@ -6,6 +6,7 @@ import kg.mega.natv_v1.models.dtos.ChannelDto;
 import kg.mega.natv_v1.models.enums.ChannelStatus;
 import kg.mega.natv_v1.models.requests.OrderRequest;
 import kg.mega.natv_v1.models.requests.PriceRequest;
+import kg.mega.natv_v1.models.responses.ChannelSaveResponse;
 import kg.mega.natv_v1.services.ChannelListService;
 import kg.mega.natv_v1.services.ChannelService;
 import kg.mega.natv_v1.services.CreateAdService;
@@ -66,6 +67,15 @@ public class OperationController {
             return ResponseEntity.ok(channelListService.list());
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+    @PostMapping("/save")
+    @ApiOperation("Сохранения канала")
+    ResponseEntity<?> save (@RequestBody ChannelSaveResponse channelDto){
+        try {
+            return ResponseEntity.ok(channelListService.save(channelDto));
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
     }
 

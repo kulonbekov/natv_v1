@@ -2,8 +2,11 @@ package kg.mega.natv_v1.services.impl;
 
 import kg.mega.natv_v1.dao.DiscountRep;
 import kg.mega.natv_v1.mappers.DiscountMapper;
+import kg.mega.natv_v1.mappers.DiscountSaveMapper;
 import kg.mega.natv_v1.models.dtos.DiscountDto;
+import kg.mega.natv_v1.models.entities.Channel;
 import kg.mega.natv_v1.models.entities.Discount;
+import kg.mega.natv_v1.models.responses.DiscountSaveResponse;
 import kg.mega.natv_v1.services.ChannelService;
 import kg.mega.natv_v1.services.DiscountService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +20,7 @@ public class DiscountServiceImpl implements DiscountService {
     private final DiscountRep discountRep;
     private final ChannelService channelService;
     private final DiscountMapper discountMapper = DiscountMapper.INSTANCE;
+    private final DiscountSaveMapper discountSaveMapper;
 
     @Override
     public DiscountDto save(DiscountDto discountDto) {
@@ -48,5 +52,12 @@ public class DiscountServiceImpl implements DiscountService {
     @Override
     public DiscountDto delete(Long id) {
         return null;
+    }
+
+    @Override
+    public List<DiscountSaveResponse> saveAll(List<DiscountSaveResponse> discounts, Channel channel) {
+        List<Discount> discountList = discountSaveMapper.toDiscountList(discounts,channel);
+        discountList = discountRep.saveAll(discountList);
+        return discountSaveMapper.toDiscountSaveList(discountList);
     }
 }
