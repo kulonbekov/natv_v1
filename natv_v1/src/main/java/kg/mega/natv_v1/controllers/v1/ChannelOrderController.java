@@ -3,7 +3,7 @@ package kg.mega.natv_v1.controllers.v1;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import kg.mega.natv_v1.models.dtos.ChannelOrderDto;
-import kg.mega.natv_v1.services.ChannelOrderService;
+import kg.mega.natv_v1.services.crudOperations.ChannelOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

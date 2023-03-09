@@ -24,6 +24,7 @@ public class Order {
     String clientEmail;
     String clientFIO;
     String clientPhone;
+    @Enumerated(EnumType.STRING)
     OrderStatus orderStatus;
     double orderSum;
     @ManyToOne

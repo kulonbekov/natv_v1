@@ -7,10 +7,10 @@ import kg.mega.natv_v1.models.enums.ChannelStatus;
 import kg.mega.natv_v1.models.requests.OrderRequest;
 import kg.mega.natv_v1.models.requests.PriceRequest;
 import kg.mega.natv_v1.models.responses.ChannelSaveResponse;
-import kg.mega.natv_v1.services.ChannelListService;
-import kg.mega.natv_v1.services.ChannelService;
-import kg.mega.natv_v1.services.CreateAdService;
-import kg.mega.natv_v1.services.GetPriceService;
+import kg.mega.natv_v1.services.mainOperations.GetChannelListService;
+import kg.mega.natv_v1.services.crudOperations.ChannelService;
+import kg.mega.natv_v1.services.mainOperations.AdvertisingRequestService;
+import kg.mega.natv_v1.services.mainOperations.GetCostAdsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,10 +22,10 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class OperationController {
 
-    private final GetPriceService getPriceService;
+    private final GetCostAdsService getCostAdsService;
     private final ChannelService channelService;
-    private final CreateAdService createAdService;
-    private final ChannelListService channelListService;
+    private final AdvertisingRequestService advertisingRequestService;
+    private final GetChannelListService getChannelListService;
 
     @PostMapping ("/calculate")
     @ApiOperation("Получить стоимости рекламы на одном канале")
@@ -38,7 +38,7 @@ public class OperationController {
         }
         if (channelDto.getChannelStatus().equals(ChannelStatus.TRUE)) {
             try {
-                return ResponseEntity.ok(getPriceService.calculate(priceRequest));
+                return ResponseEntity.ok(getCostAdsService.calculate(priceRequest));
             } catch (Exception e) {
                 return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
             }
@@ -51,7 +51,7 @@ public class OperationController {
     @ApiOperation("Создание заявки на рекламу")
     ResponseEntity<?> save(@RequestBody OrderRequest orderRequest) {
         try {
-            return ResponseEntity.ok(createAdService.newCreateAd(orderRequest));
+            return ResponseEntity.ok(advertisingRequestService.newCreateAd(orderRequest));
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
@@ -61,7 +61,7 @@ public class OperationController {
     @ApiOperation("Получения списка актуальный каналов")
     ResponseEntity<?> list() {
         try {
-            return ResponseEntity.ok(channelListService.list());
+            return ResponseEntity.ok(getChannelListService.list());
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
@@ -70,7 +70,7 @@ public class OperationController {
     @ApiOperation("Создание канала")
     ResponseEntity<?> save (@RequestBody ChannelSaveResponse channelDto){
         try {
-            return ResponseEntity.ok(channelListService.save(channelDto));
+            return ResponseEntity.ok(getChannelListService.save(channelDto));
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
@@ -79,7 +79,7 @@ public class OperationController {
     @ApiOperation("Редактирование канала")
     ResponseEntity<?> update (@RequestBody ChannelSaveResponse channelDto){
         try {
-            return ResponseEntity.ok(channelListService.update(channelDto));
+            return ResponseEntity.ok(getChannelListService.update(channelDto));
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }

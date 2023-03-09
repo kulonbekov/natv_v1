@@ -3,7 +3,7 @@ package kg.mega.natv_v1.controllers.v1;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import kg.mega.natv_v1.models.dtos.OrderDto;
-import kg.mega.natv_v1.services.OrderService;
+import kg.mega.natv_v1.services.crudOperations.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

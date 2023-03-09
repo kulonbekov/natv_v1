@@ -4,7 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import kg.mega.natv_v1.dao.PriceRep;
 import kg.mega.natv_v1.models.dtos.PriceDto;
-import kg.mega.natv_v1.services.PriceService;
+import kg.mega.natv_v1.services.crudOperations.PriceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

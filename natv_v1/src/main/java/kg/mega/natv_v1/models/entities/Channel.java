@@ -22,6 +22,7 @@ public class Channel {
     String channelName;
     @JsonFormat(pattern = "dd.MM.yyyy HH:mm")
     Date createdDate;
+    @Enumerated(EnumType.STRING)
     ChannelStatus channelStatus;
     String logoPath;
 
