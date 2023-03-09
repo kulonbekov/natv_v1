@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface ChannelRep extends JpaRepository<Channel, Long> {
 
-    @Query(value = "select * from tb_channel where channel_status = 1", nativeQuery = true)
+    @Query(value = "select * from tb_channel where channel_status = 1 order by channel_name asc", nativeQuery = true)
     List<Channel> findAllByActive();
 }

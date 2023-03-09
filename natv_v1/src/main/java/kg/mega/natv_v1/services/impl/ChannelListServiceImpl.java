@@ -51,7 +51,7 @@ public class ChannelListServiceImpl implements ChannelListService {
 
             if (priceRep.getPrice(item.getId()) != null) { // Проверить по текущему каналу ,активные цены на рекламу
                 if (getDiscount(item.getId()) != null) {  // Проверить по текущему каналу ,активные скидки на рекламу
-                    channelListResponse.setPricePerSymbol(priceRep.getPrice(item.getId()).getPricePerSymbol());
+                    channelListResponse.setPricePerSymbol(getPrice(item.getId()));
                     channelListResponse.setDiscountResponses(getDiscount(item.getId()));
 
                 }
@@ -108,5 +108,18 @@ public class ChannelListServiceImpl implements ChannelListService {
             }
         }
         return newDiscounts;
+    }
+
+    private double getPrice (Long id){ //Получить актуальную цену на рекламу
+        double price = 0.0;
+        List<Price> prices = priceRep.getPrice(id);
+
+        for (Price item: prices) {
+            if (item.getStartDate().before(new Date()) &&
+                    item.getEndDate().after(new Date())){
+                price = item.getPricePerSymbol();
+            }
+        }
+        return price;
     }
 }

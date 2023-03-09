@@ -14,10 +14,7 @@ import kg.mega.natv_v1.services.GetPriceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Api(tags = "1. Операции")
 @RestController
@@ -30,7 +27,7 @@ public class OperationController {
     private final CreateAdService createAdService;
     private final ChannelListService channelListService;
 
-    @PostMapping("/calculate")
+    @PostMapping ("/calculate")
     @ApiOperation("Получить стоимости рекламы на одном канале")
     ResponseEntity<?> calculate(@RequestBody PriceRequest priceRequest) {
         ChannelDto channelDto = null;
@@ -51,7 +48,7 @@ public class OperationController {
     }
 
     @PostMapping("/createAd")
-    @ApiOperation("Создание заявку на рекламу")
+    @ApiOperation("Создание заявки на рекламу")
     ResponseEntity<?> save(@RequestBody OrderRequest orderRequest) {
         try {
             return ResponseEntity.ok(createAdService.newCreateAd(orderRequest));
@@ -60,7 +57,7 @@ public class OperationController {
         }
     }
 
-    @PostMapping("/list")
+    @GetMapping("/list")
     @ApiOperation("Получения списка актуальный каналов")
     ResponseEntity<?> list() {
         try {
@@ -78,7 +75,7 @@ public class OperationController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
     }
-    @PostMapping("/update")
+    @PutMapping ("/update")
     @ApiOperation("Редактирование канала")
     ResponseEntity<?> update (@RequestBody ChannelSaveResponse channelDto){
         try {

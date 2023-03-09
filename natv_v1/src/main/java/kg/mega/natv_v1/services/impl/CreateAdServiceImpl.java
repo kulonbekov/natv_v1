@@ -9,7 +9,9 @@ import kg.mega.natv_v1.models.dtos.ChannelOrderDto;
 import kg.mega.natv_v1.models.dtos.OrderDto;
 import kg.mega.natv_v1.models.dtos.TextDto;
 import kg.mega.natv_v1.models.entities.Discount;
+import kg.mega.natv_v1.models.entities.Price;
 import kg.mega.natv_v1.models.requests.OrderRequest;
+import kg.mega.natv_v1.models.requests.PriceRequest;
 import kg.mega.natv_v1.models.responses.ChannelResponse;
 import kg.mega.natv_v1.models.responses.OrderResponse;
 import kg.mega.natv_v1.services.*;
@@ -106,7 +108,7 @@ public class CreateAdServiceImpl implements CreateAdService {
             Long channelId = orderRequest.getChannelRequest().get(i).getChannelId();
             List<Discount> discounts = discountRep.getDiscounts(channelId);
             int discount = getDiscount(discounts, daysCount);
-            double price = priceRep.getPrice(channelId).getPricePerSymbol() * textDto.getSymbolCount() * daysCount;
+            double price = getPrice(channelId) * textDto.getSymbolCount() * daysCount;
             double priceWithDiscount = price - ((price * discount) / 100);
             channelResponse.setChannelId(channelId);
             channelResponse.setPrice(price);
@@ -116,5 +118,18 @@ public class CreateAdServiceImpl implements CreateAdService {
             totalPrice += priceWithDiscount;
         }
         return channelResponses;
+    }
+
+    private double getPrice (Long id){ //Получить актуальную цену на рекламу
+        double price = 0.0;
+        List<Price> prices = priceRep.getPrice(id);
+
+        for (Price item: prices) {
+            if (item.getStartDate().before(new Date()) &&
+                    item.getEndDate().after(new Date())){
+                price = item.getPricePerSymbol();
+            }
+        }
+        return price;
     }
 }

@@ -5,9 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface PriceRep extends JpaRepository<Price, Long> {
 
     @Query(value = "select * from tb_price where channel_id = :id", nativeQuery = true)
-    Price getPrice(Long id);
+    List<Price> getPrice(Long id);
 }
