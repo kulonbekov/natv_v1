@@ -14,6 +14,7 @@ import kg.mega.natv_v1.models.responses.DiscountSaveResponse;
 import kg.mega.natv_v1.services.mainOperations.GetChannelListService;
 import kg.mega.natv_v1.services.crudOperations.DiscountService;
 import kg.mega.natv_v1.services.crudOperations.PriceService;
+import kg.mega.natv_v1.services.mainOperations.GetCostAdsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,7 @@ public class GetChannelListServiceImpl implements GetChannelListService {
     private final OrderSaveMapper orderSaveMapper;
     private final DiscountService discountService;
     private final PriceService priceService;
+    private final GetCostAdsService getCostAdsService;
 
     @Override
     public List<ChannelListResponse> list() {
@@ -44,7 +46,7 @@ public class GetChannelListServiceImpl implements GetChannelListService {
 
             if (priceRep.getPrice(item.getId()) != null) { // Проверить по текущему каналу ,активные цены на рекламу
                 if (getDiscount(item.getId()) != null) {  // Проверить по текущему каналу ,активные скидки на рекламу
-                    channelListResponse.setPricePerSymbol(getPrice(item.getId()));
+                    channelListResponse.setPricePerSymbol(getCostAdsService.getPrice(item.getId()));
                     channelListResponse.setDiscountResponses(getDiscount(item.getId()));
 
                 }
@@ -101,18 +103,5 @@ public class GetChannelListServiceImpl implements GetChannelListService {
             }
         }
         return newDiscounts;
-    }
-
-    private double getPrice (Long id){ //Получить актуальную цену на рекламу
-        double price = 0.0;
-        List<Price> prices = priceRep.getPrice(id);
-
-        for (Price item: prices) {
-            if (item.getStartDate().before(new Date()) &&
-                    item.getEndDate().after(new Date())){
-                price = item.getPricePerSymbol();
-            }
-        }
-        return price;
     }
 }

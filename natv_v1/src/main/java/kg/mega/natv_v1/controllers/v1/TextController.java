@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api(tags = "6. Текст")
+@Api(tags = "6. Тексты реклам")
 @RestController
 @RequestMapping("/api/v1/text")
 @RequiredArgsConstructor

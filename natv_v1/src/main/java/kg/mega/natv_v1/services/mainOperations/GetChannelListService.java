@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface GetChannelListService {
     List<ChannelListResponse> list();
-
     ChannelSaveResponse save(ChannelSaveResponse channelDto);
     ChannelSaveResponse update(ChannelSaveResponse channelDto);
 }

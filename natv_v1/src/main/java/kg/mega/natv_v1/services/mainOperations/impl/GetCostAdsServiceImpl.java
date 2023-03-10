@@ -25,10 +25,10 @@ public class GetCostAdsServiceImpl implements GetCostAdsService {
     public PriceResponse calculate(PriceRequest priceRequest) {
 
 
-        int discount = getDiscount(priceRequest); // Проверка для получение скидик по заданному количеству дней
+        int discount = getDiscount(priceRequest); // Проверка для получение скидок по заданному количеству дней
 
         int symbolCount = (priceRequest.getText().replaceAll(" ", "").length()); // Подсчитать количество символов в тексте обьявления
-        double price = getPrice(priceRequest)* symbolCount * priceRequest.getDaysCount(); // Подсчитать общую сумму без скидки
+        double price = getPrice(priceRequest.getChannelId())* symbolCount * priceRequest.getDaysCount(); // Подсчитать общую сумму без скидки
         double priceWithDiscount = price - ((price * discount) / 100); // Подсчитать общую сумму со скидкой
 
         return orderSaveMapper.requestToResponse(priceRequest, price, priceWithDiscount); //Возвращает json "PriceResponse"
@@ -49,9 +49,10 @@ public class GetCostAdsServiceImpl implements GetCostAdsService {
         }
         return discount;
     }
-   private double getPrice (PriceRequest priceRequest){ //Получить актуальную цену на рекламу
+    @Override
+    public double getPrice (Long id){ //Получить актуальную цену на рекламу
         double price = 0.0;
-        List<Price> prices = priceRep.getPrice(priceRequest.getChannelId());
+        List<Price> prices = priceRep.getPrice(id);
 
        for (Price item: prices) {
            if (item.getStartDate().before(new Date()) &&
@@ -60,5 +61,5 @@ public class GetCostAdsServiceImpl implements GetCostAdsService {
            }
        }
         return price;
-   }
+    }
 }

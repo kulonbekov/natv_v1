@@ -6,4 +6,5 @@ import kg.mega.natv_v1.models.responses.PriceResponse;
 public interface GetCostAdsService {
 
     PriceResponse calculate(PriceRequest priceRequest);
+    double getPrice(Long id);
 }

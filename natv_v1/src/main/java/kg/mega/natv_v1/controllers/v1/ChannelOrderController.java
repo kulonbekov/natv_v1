@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api(tags = "8. Канал и Заказ")
+@Api(tags = "8. Каналы и Заказы")
 @RestController
 @RequestMapping("/api/v1/channelOrder")
 @RequiredArgsConstructor
