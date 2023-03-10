@@ -16,7 +16,7 @@ public class DiscountSaveMapperImpl implements DiscountSaveMapper {
     @Override
     public List<Discount> toDiscountList(List<DiscountSaveResponse> discounts, Channel channel) {
         List<Discount> discountList = discounts.stream()
-                .map(item->getNewDiscount(item, channel))
+                .map(item -> getNewDiscount(item, channel))
                 .collect(Collectors.toList());
         return discountList;
     }
@@ -24,12 +24,12 @@ public class DiscountSaveMapperImpl implements DiscountSaveMapper {
     @Override
     public List<DiscountSaveResponse> toDiscountSaveList(List<Discount> discounts) {
         List<DiscountSaveResponse> discountList = discounts.stream()
-                .map(item->toDiscountSave(item))
+                .map(item -> toDiscountSave(item))
                 .collect(Collectors.toList());
         return discountList;
     }
 
-    private Discount getNewDiscount(DiscountSaveResponse item, Channel channel){
+    private Discount getNewDiscount(DiscountSaveResponse item, Channel channel) {
 
         Discount discount = new Discount();
         discount.setId(item.getId());
@@ -41,7 +41,8 @@ public class DiscountSaveMapperImpl implements DiscountSaveMapper {
         discount.setEndDate(DateUtil.getINSTANCE().getEndDate());
         return discount;
     }
-    private DiscountSaveResponse toDiscountSave (Discount item){
+
+    private DiscountSaveResponse toDiscountSave(Discount item) {
         DiscountSaveResponse discountDto = new DiscountSaveResponse();
         discountDto.setId(item.getId());
         discountDto.setDiscountDays(item.getDiscountDays());

@@ -9,9 +9,9 @@ import kg.mega.natv_v1.models.enums.ChannelStatus;
 import kg.mega.natv_v1.models.requests.OrderRequest;
 import kg.mega.natv_v1.models.requests.PriceRequest;
 import kg.mega.natv_v1.models.responses.ChannelSaveResponse;
-import kg.mega.natv_v1.services.mainOperations.GetChannelListService;
 import kg.mega.natv_v1.services.crudOperations.ChannelService;
 import kg.mega.natv_v1.services.mainOperations.AdvertisingRequestService;
+import kg.mega.natv_v1.services.mainOperations.GetChannelListService;
 import kg.mega.natv_v1.services.mainOperations.GetCostAdsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,7 +31,7 @@ public class OperationController {
     private final PriceRep priceRep;
     private final ChannelRep channelRep;
 
-    @PostMapping ("/channel/calculate")
+    @PostMapping("/channel/calculate")
     @ApiOperation("Получить стоимости рекламы на одном канале")
     ResponseEntity<?> calculate(@RequestBody PriceRequest priceRequest) {
         ChannelDto channelDto = null;
@@ -46,9 +46,9 @@ public class OperationController {
             } catch (Exception e) {
                 return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
             }
-        } else if(priceRep.getPrice(priceRequest.getChannelId()).isEmpty()) {
+        } else if (priceRep.getPrice(priceRequest.getChannelId()).isEmpty()) {
             return ResponseEntity.status(400).body("The channel has not price");
-        }else{
+        } else {
             return ResponseEntity.status(400).body("Channel is not active");
         }
     }
@@ -59,17 +59,17 @@ public class OperationController {
 
         boolean check = true;
         for (int i = 0; i < orderRequest.getChannelRequest().size(); i++) {
-            if(channelRep.finByIdAndActual(orderRequest.getChannelRequest().get(i).getChannelId())==null){
+            if (channelRep.finByIdAndActual(orderRequest.getChannelRequest().get(i).getChannelId()) == null) {
                 check = false;
             }
         }
-        if(check){
+        if (check) {
             try {
                 return ResponseEntity.ok(advertisingRequestService.newCreateAd(orderRequest));
             } catch (Exception e) {
                 return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
             }
-        }else {
+        } else {
             return ResponseEntity.status(400).body("Сhannel not found or not active");
         }
 
@@ -84,18 +84,20 @@ public class OperationController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
+
     @PostMapping("/channel/save")
     @ApiOperation("Создание канала")
-    ResponseEntity<?> save (@RequestBody ChannelSaveResponse channelDto){
+    ResponseEntity<?> save(@RequestBody ChannelSaveResponse channelDto) {
         try {
             return ResponseEntity.ok(getChannelListService.save(channelDto));
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
     }
-    @PutMapping ("/channel/update")
+
+    @PutMapping("/channel/update")
     @ApiOperation("Редактирование канала")
-    ResponseEntity<?> update (@RequestBody ChannelSaveResponse channelDto){
+    ResponseEntity<?> update(@RequestBody ChannelSaveResponse channelDto) {
         try {
             return ResponseEntity.ok(getChannelListService.update(channelDto));
         } catch (Exception e) {

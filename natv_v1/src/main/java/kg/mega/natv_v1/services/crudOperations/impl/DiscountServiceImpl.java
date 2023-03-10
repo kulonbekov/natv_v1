@@ -59,7 +59,7 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public List<DiscountSaveResponse> saveAll(List<DiscountSaveResponse> discounts, Channel channel) {
-        List<Discount> discountList = discountSaveMapper.toDiscountList(discounts,channel);
+        List<Discount> discountList = discountSaveMapper.toDiscountList(discounts, channel);
         discountList = discountRep.saveAll(discountList);
         return discountSaveMapper.toDiscountSaveList(discountList);
     }
@@ -70,9 +70,9 @@ public class DiscountServiceImpl implements DiscountService {
         List<Discount> currentDiscounts = discountRep.findAllByChannelAndEndDate(channel, DateUtil.getINSTANCE().getEndDate());
         List<Discount> discountForDelete = new ArrayList<>();
 
-        for(Discount discount: currentDiscounts){
-            for(DiscountSaveResponse discountDto: discounts){
-                if(!discount.getId().equals(discountDto.getId())){
+        for (Discount discount : currentDiscounts) {
+            for (DiscountSaveResponse discountDto : discounts) {
+                if (!discount.getId().equals(discountDto.getId())) {
                     discount.setEndDate(new Date());
                     discountForDelete.add(discount);
                     break;

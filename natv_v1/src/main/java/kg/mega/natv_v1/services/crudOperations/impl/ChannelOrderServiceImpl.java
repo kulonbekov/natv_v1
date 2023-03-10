@@ -1,7 +1,6 @@
 package kg.mega.natv_v1.services.crudOperations.impl;
 
 import kg.mega.natv_v1.dao.ChannelOrderRep;
-import kg.mega.natv_v1.dao.ChannelRep;
 import kg.mega.natv_v1.mappers.ChannelOrderMapper;
 import kg.mega.natv_v1.models.dtos.ChannelOrderDto;
 import kg.mega.natv_v1.models.entities.ChannelOrder;

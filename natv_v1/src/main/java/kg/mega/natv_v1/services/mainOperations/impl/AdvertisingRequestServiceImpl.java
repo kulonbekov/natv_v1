@@ -1,13 +1,10 @@
 package kg.mega.natv_v1.services.mainOperations.impl;
 
-import kg.mega.natv_v1.dao.ChannelOrderRep;
 import kg.mega.natv_v1.dao.DiscountRep;
-import kg.mega.natv_v1.dao.PriceRep;
 import kg.mega.natv_v1.mappers.mainMapper.EmailMapper;
 import kg.mega.natv_v1.mappers.mainMapper.OrderSaveMapper;
 import kg.mega.natv_v1.models.dtos.*;
 import kg.mega.natv_v1.models.entities.Discount;
-import kg.mega.natv_v1.models.entities.Price;
 import kg.mega.natv_v1.models.requests.OrderRequest;
 import kg.mega.natv_v1.models.responses.ChannelResponse;
 import kg.mega.natv_v1.models.responses.OrderResponse;
@@ -16,7 +13,6 @@ import kg.mega.natv_v1.services.email.EmailService;
 import kg.mega.natv_v1.services.mainOperations.AdvertisingRequestService;
 import kg.mega.natv_v1.services.mainOperations.GetCostAdsService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -44,26 +40,25 @@ public class AdvertisingRequestServiceImpl implements AdvertisingRequestService 
         List<ChannelResponse> channelResponses = new ArrayList<>();
         TextDto textDto = getTextDto(orderRequest); //Создание нового TextDto и передать Текст рекламы
 
-        try{
+        try {
             channelResponses = saveChannelResponse(orderRequest, textDto); // сформировать json для ChannelResponse
             totalPrice = getTotalPrice(orderRequest, textDto);
             orderDto = orderService.save(orderSaveMapper.orderRequestToOrder(orderRequest, textDto, totalPrice)); // Создание и сохрание нового записа в таблицу "tb_order"
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             throw new RuntimeException("Save error 'Order' ");
         }
-        try{
+        try {
             saveChannelOrder(orderRequest, orderDto); //Сохранение нового записа в промежуточную таблицу "tb_channel_order" и сохранение записей дат в таблицу "tb_order_dates"
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             throw new RuntimeException("\n" + "Save error 'ChannelOrder'");
         }
 
         OrderResponse orderResponse = orderSaveMapper.getOrderResponse(orderDto, textDto, channelResponses);
         settingEmail(orderResponse); //Отправка письма к клиенту
-        return  orderResponse; //возвращает json для "orderResponse"
+        return orderResponse; //возвращает json для "orderResponse"
     }
-
 
 
     @Override
@@ -72,9 +67,9 @@ public class AdvertisingRequestServiceImpl implements AdvertisingRequestService 
         String subject = "Advertising" + new Date();
         String text = emailMapper.orderResponseToString(orderResponse);
 
-        try{
-            emailService.send(email,subject,text);
-        }catch (Exception e){
+        try {
+            emailService.send(email, subject, text);
+        } catch (Exception e) {
             e.getMessage();
         }
     }
@@ -132,7 +127,8 @@ public class AdvertisingRequestServiceImpl implements AdvertisingRequestService 
         }
         return channelResponses;
     }
-    private  double getTotalPrice (OrderRequest orderRequest, TextDto textDto){
+
+    private double getTotalPrice(OrderRequest orderRequest, TextDto textDto) {
         double totalPrice = 0.0;
         for (int i = 0; i < orderRequest.getChannelRequest().size(); i++) {
             int daysCount = orderRequest.getChannelRequest().get(i).getDateList().size();

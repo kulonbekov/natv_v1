@@ -6,14 +6,13 @@ import kg.mega.natv_v1.dao.PriceRep;
 import kg.mega.natv_v1.mappers.mainMapper.OrderSaveMapper;
 import kg.mega.natv_v1.models.entities.Channel;
 import kg.mega.natv_v1.models.entities.Discount;
-import kg.mega.natv_v1.models.entities.Price;
 import kg.mega.natv_v1.models.responses.ChannelListResponse;
 import kg.mega.natv_v1.models.responses.ChannelSaveResponse;
 import kg.mega.natv_v1.models.responses.DiscountResponse;
 import kg.mega.natv_v1.models.responses.DiscountSaveResponse;
-import kg.mega.natv_v1.services.mainOperations.GetChannelListService;
 import kg.mega.natv_v1.services.crudOperations.DiscountService;
 import kg.mega.natv_v1.services.crudOperations.PriceService;
+import kg.mega.natv_v1.services.mainOperations.GetChannelListService;
 import kg.mega.natv_v1.services.mainOperations.GetCostAdsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -64,10 +63,10 @@ public class GetChannelListServiceImpl implements GetChannelListService {
         channelDto.setId(channel.getId());
         channelDto.setChannelStatus(channel.getChannelStatus());
 
-        Long priceId = priceService.save(channelDto.getPricePerSymbol(),channel);
+        Long priceId = priceService.save(channelDto.getPricePerSymbol(), channel);
         channelDto.setPriceId(priceId);
 
-        channelDto.setDiscountSaveResponses(discountService.saveAll(channelDto.getDiscountSaveResponses(),channel));
+        channelDto.setDiscountSaveResponses(discountService.saveAll(channelDto.getDiscountSaveResponses(), channel));
 
         return channelDto;
     }
@@ -75,11 +74,11 @@ public class GetChannelListServiceImpl implements GetChannelListService {
     @Override
     public ChannelSaveResponse update(ChannelSaveResponse channelDto) {
 
-        Channel channel = channelRep.findById(channelDto.getId()).orElseThrow(()->new RuntimeException("Channel not found"));
+        Channel channel = channelRep.findById(channelDto.getId()).orElseThrow(() -> new RuntimeException("Channel not found"));
         channel = orderSaveMapper.channelSaveResponseToChannel(channelDto);
         channel = channelRep.save(channel);
 
-        Long priceId = priceService.update(channelDto.getPriceId(),channelDto.getPricePerSymbol(),channel);
+        Long priceId = priceService.update(channelDto.getPriceId(), channelDto.getPricePerSymbol(), channel);
         channelDto.setPriceId(priceId);
 
         List<DiscountSaveResponse> discountDtos = discountService.update(channelDto.getDiscountSaveResponses(), channel);
