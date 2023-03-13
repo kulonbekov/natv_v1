@@ -29,9 +29,7 @@ public class DiscountServiceImpl implements DiscountService {
     public DiscountDto save(DiscountDto discountDto) {
         Discount discount = discountMapper.discountDtoToDiscount(discountDto);
         discount = discountRep.save(discount);
-        discountDto.setId(discount.getId());
-        discountDto.setStartDate(discount.getStartDate());
-        discountDto.setEndDate(discount.getEndDate());
+        discountDto = discountMapper.discountToDiscountDto(discount);
         discountDto.setChannelDto(channelService.findById(discountDto.getChannelDto().getId()));
         return discountDto;
     }

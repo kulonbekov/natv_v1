@@ -33,7 +33,7 @@ public class GetChannelListServiceImpl implements GetChannelListService {
     private final GetCostAdsService getCostAdsService;
 
     @Override
-    public List<ChannelListResponse> list() {
+    public List<ChannelListResponse> list() {  // Получения списка активных каналов
         List<ChannelListResponse> channelListResponses = new ArrayList<>();
         List<Channel> channels = channelRep.findAllByActive(); // Получить все активные каналы
 
@@ -43,8 +43,8 @@ public class GetChannelListServiceImpl implements GetChannelListService {
             channelListResponse.setChannelName(item.getChannelName());
             channelListResponse.setLogoPath(item.getLogoPath());
 
-            if (priceRep.getPrice(item.getId()) != null) { // Проверить по текущему каналу ,активные цены на рекламу
-                if (getDiscount(item.getId()) != null) {  // Проверить по текущему каналу ,активные скидки на рекламу
+            if (priceRep.getPrice(item.getId()) != null) { // Проверить полученный price, на не пустое значение
+                if (getDiscount(item.getId()) != null) {  // Проверить полученный discount, на не пустое значение
                     channelListResponse.setPricePerSymbol(getCostAdsService.getPrice(item.getId()));
                     channelListResponse.setDiscountResponses(getDiscount(item.getId()));
 
@@ -56,7 +56,7 @@ public class GetChannelListServiceImpl implements GetChannelListService {
     }
 
     @Override
-    public ChannelSaveResponse save(ChannelSaveResponse channelDto) {
+    public ChannelSaveResponse save(ChannelSaveResponse channelDto) { // Добавить нового канала в базу со всеми скидками и прайс
 
         Channel channel = orderSaveMapper.channelSaveResponseToChannel(channelDto);
         channel = channelRep.save(channel);
@@ -72,7 +72,7 @@ public class GetChannelListServiceImpl implements GetChannelListService {
     }
 
     @Override
-    public ChannelSaveResponse update(ChannelSaveResponse channelDto) {
+    public ChannelSaveResponse update(ChannelSaveResponse channelDto) { // Обновить данные по каналу
 
         Channel channel = channelRep.findById(channelDto.getId()).orElseThrow(() -> new RuntimeException("Channel not found"));
         channel = orderSaveMapper.channelSaveResponseToChannel(channelDto);

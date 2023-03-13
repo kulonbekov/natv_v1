@@ -113,16 +113,20 @@ public class AdvertisingRequestServiceImpl implements AdvertisingRequestService 
         List<ChannelResponse> channelResponses = new ArrayList<>();
 
         for (ChannelRequest item : orderRequest.getChannelRequest()) {
-
-            ChannelResponse channelResponse = new ChannelResponse();
-            channelResponse.setChannelId(item.getChannelId());
-            channelResponse.setPrice(getPriceWithDiscount(item, textDto).getPrice());
-            channelResponse.setPriceWithDiscount(getPriceWithDiscount(item, textDto).getPriceWithDiscount());
-            channelResponse.setDateList(item.getDateList());
-
-            channelResponses.add(channelResponse);
+            channelResponses.add(getChannelResponse(item,textDto));
         }
         return channelResponses;
+    }
+    private ChannelResponse getChannelResponse(ChannelRequest item, TextDto textDto){ // Получить объект ChannelResponse
+
+        ChannelResponse channelResponse = new ChannelResponse();
+
+        channelResponse.setChannelId(item.getChannelId());
+        channelResponse.setPrice(getPriceWithDiscount(item, textDto).getPrice());
+        channelResponse.setPriceWithDiscount(getPriceWithDiscount(item, textDto).getPriceWithDiscount());
+        channelResponse.setDateList(item.getDateList());
+
+        return channelResponse;
     }
 
     private double getTotalPrice(OrderRequest orderRequest, TextDto textDto) { //Получить total price по всем каналам

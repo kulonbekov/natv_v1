@@ -13,15 +13,11 @@ public interface OrderMapper {
 
     OrderMapper INSTANCE = Mappers.getMapper(OrderMapper.class);
 
-
     @Mapping(source = "textDto", target = "text")
     Order orderDtoToOrder(OrderDto orderDto);
-
     List<Order> orderDtoToOrderList(List<OrderDto> orderDto);
-
     @Mapping(source = "text", target = "textDto")
     OrderDto orderToOrderDto(Order order);
-
     List<OrderDto> orderToOrderDtoList(List<Order> order);
 
 

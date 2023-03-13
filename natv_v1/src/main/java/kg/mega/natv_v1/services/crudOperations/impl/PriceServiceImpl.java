@@ -26,9 +26,7 @@ public class PriceServiceImpl implements PriceService {
     public PriceDto save(PriceDto priceDto) {
         Price price = priceMapper.priceDtoToPrice(priceDto);
         price = priceRep.save(price);
-        priceDto.setId(price.getId());
-        priceDto.setStartDate(price.getStartDate());
-        priceDto.setEndDate(price.getEndDate());
+        priceDto = priceMapper.priceToPriceDto(price);
         priceDto.setChannelDto(channelService.findById(priceDto.getId()));
         return priceDto;
     }

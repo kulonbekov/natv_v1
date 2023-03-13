@@ -12,11 +12,8 @@ public interface TextMapper {
     TextMapper INSTANCE = Mappers.getMapper(TextMapper.class);
 
     Text textDtoToText(TextDto textDto);
-
     List<Text> textDtoToTextList(List<TextDto> textDtoList);
-
     TextDto textToTextDto(Text text);
-
     List<TextDto> textToTextDtoList(List<Text> text);
 
 }
