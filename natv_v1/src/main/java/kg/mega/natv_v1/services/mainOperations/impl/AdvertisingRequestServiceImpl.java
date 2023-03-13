@@ -5,9 +5,11 @@ import kg.mega.natv_v1.mappers.mainMapper.EmailMapper;
 import kg.mega.natv_v1.mappers.mainMapper.OrderSaveMapper;
 import kg.mega.natv_v1.models.dtos.*;
 import kg.mega.natv_v1.models.entities.Discount;
+import kg.mega.natv_v1.models.requests.ChannelRequest;
 import kg.mega.natv_v1.models.requests.OrderRequest;
 import kg.mega.natv_v1.models.responses.ChannelResponse;
 import kg.mega.natv_v1.models.responses.OrderResponse;
+import kg.mega.natv_v1.models.responses.PriceResponse;
 import kg.mega.natv_v1.services.crudOperations.*;
 import kg.mega.natv_v1.services.email.EmailService;
 import kg.mega.natv_v1.services.mainOperations.AdvertisingRequestService;
@@ -35,15 +37,15 @@ public class AdvertisingRequestServiceImpl implements AdvertisingRequestService 
 
     @Override
     public OrderResponse newCreateAd(OrderRequest orderRequest) {
-        OrderDto orderDto = new OrderDto();
-        double totalPrice = 0.0;
+
+        OrderDto orderDto;
         List<ChannelResponse> channelResponses = new ArrayList<>();
+
         TextDto textDto = getTextDto(orderRequest); //Создание нового TextDto и передать Текст рекламы
 
         try {
             channelResponses = saveChannelResponse(orderRequest, textDto); // сформировать json для ChannelResponse
-            totalPrice = getTotalPrice(orderRequest, textDto);
-            orderDto = orderService.save(orderSaveMapper.orderRequestToOrder(orderRequest, textDto, totalPrice)); // Создание и сохрание нового записа в таблицу "tb_order"
+            orderDto = orderService.save(orderSaveMapper.orderRequestToOrder(orderRequest, textDto, getTotalPrice(orderRequest, textDto))); // Создание и сохрание нового записа в таблицу "tb_order"
         } catch (Exception e) {
             System.out.println(e.getMessage());
             throw new RuntimeException("Save error 'Order' ");
@@ -96,11 +98,11 @@ public class AdvertisingRequestServiceImpl implements AdvertisingRequestService 
 
     private void saveChannelOrder(OrderRequest orderRequest, OrderDto orderDto) { //Сохранение нового записа в промежуточную таблицу "tb_channel_order" и сохранение записей дат в таблицу "tb_order_dates"
 
-        for (int i = 0; i < orderRequest.getChannelRequest().size(); i++) {
-            ChannelDto channelDto = channelService.findById(orderRequest.getChannelRequest().get(i).getChannelId());
+        for (ChannelRequest i : orderRequest.getChannelRequest()) {
+            ChannelDto channelDto = channelService.findById(i.getChannelId());
             ChannelOrderDto channelOrderDto = channelOrderService.save(orderSaveMapper.getChannelOrderDto(channelDto, orderDto, orderRequest, i));
-            for (int j = 0; j < orderRequest.getChannelRequest().get(i).getDateList().size(); j++) {
-                OrderDatesDto orderDatesDto = orderSaveMapper.getOrderDatesDto(orderRequest, channelOrderDto, i, j);
+            for (Date j : i.getDateList()) {
+                OrderDatesDto orderDatesDto = orderSaveMapper.getOrderDatesDto(orderRequest, channelOrderDto, j);
                 orderDatesService.save(orderDatesDto);
             }
         }
@@ -109,37 +111,42 @@ public class AdvertisingRequestServiceImpl implements AdvertisingRequestService 
     private List<ChannelResponse> saveChannelResponse(OrderRequest orderRequest, TextDto textDto) { // сформировать json для ChannelResponse
 
         List<ChannelResponse> channelResponses = new ArrayList<>();
-        for (int i = 0; i < orderRequest.getChannelRequest().size(); i++) {
+
+        for (ChannelRequest item : orderRequest.getChannelRequest()) {
+
             ChannelResponse channelResponse = new ChannelResponse();
-            int daysCount = orderRequest.getChannelRequest().get(i).getDateList().size();
-            Long channelId = orderRequest.getChannelRequest().get(i).getChannelId();
-            List<Discount> discounts = discountRep.getDiscounts(channelId);
-            int discount = getDiscount(discounts, daysCount);
-            double price = getCostAdsService.getPrice(channelId) * textDto.getSymbolCount() * daysCount;
-            double priceWithDiscount = price - ((price * discount) / 100);
+            channelResponse.setChannelId(item.getChannelId());
+            channelResponse.setPrice(getPriceWithDiscount(item, textDto).getPrice());
+            channelResponse.setPriceWithDiscount(getPriceWithDiscount(item, textDto).getPriceWithDiscount());
+            channelResponse.setDateList(item.getDateList());
 
-            channelResponse.setChannelId(channelId);
-            channelResponse.setPrice(price);
-            channelResponse.setPriceWithDiscount(priceWithDiscount);
-            channelResponse.setDateList(orderRequest.getChannelRequest().get(i).getDateList());
             channelResponses.add(channelResponse);
-
         }
         return channelResponses;
     }
 
-    private double getTotalPrice(OrderRequest orderRequest, TextDto textDto) {
+    private double getTotalPrice(OrderRequest orderRequest, TextDto textDto) { //Получить total price по всем каналам
         double totalPrice = 0.0;
-        for (int i = 0; i < orderRequest.getChannelRequest().size(); i++) {
-            int daysCount = orderRequest.getChannelRequest().get(i).getDateList().size();
-            Long channelId = orderRequest.getChannelRequest().get(i).getChannelId();
-            List<Discount> discounts = discountRep.getDiscounts(channelId);
-            int discount = getDiscount(discounts, daysCount);
-            double price = getCostAdsService.getPrice(channelId) * textDto.getSymbolCount() * daysCount;
-            double priceWithDiscount = price - ((price * discount) / 100);
-            totalPrice += priceWithDiscount;
 
+        for (ChannelRequest item : orderRequest.getChannelRequest()) {
+            totalPrice += getPriceWithDiscount(item, textDto).getPriceWithDiscount();
         }
         return totalPrice;
+    }
+
+    private PriceResponse getPriceWithDiscount(ChannelRequest item, TextDto textDto) { // Метод для подсчета price и priceWithDiscount
+        PriceResponse priceResponse = new PriceResponse();
+
+        int daysCount = item.getDateList().size();
+        Long channelId = item.getChannelId();
+        List<Discount> discounts = discountRep.getDiscounts(channelId);
+        int discount = getDiscount(discounts, daysCount);
+        double price = getCostAdsService.getPrice(channelId) * textDto.getSymbolCount() * daysCount;
+        double priceWithDiscount = price - ((price * discount) / 100);
+
+        priceResponse.setPrice(price);
+        priceResponse.setPriceWithDiscount(priceWithDiscount);
+
+        return priceResponse;
     }
 }

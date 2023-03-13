@@ -2,10 +2,12 @@ package kg.mega.natv_v1.mappers.mainMapper;
 
 import kg.mega.natv_v1.models.dtos.*;
 import kg.mega.natv_v1.models.entities.Channel;
+import kg.mega.natv_v1.models.requests.ChannelRequest;
 import kg.mega.natv_v1.models.requests.OrderRequest;
 import kg.mega.natv_v1.models.requests.PriceRequest;
 import kg.mega.natv_v1.models.responses.*;
 
+import java.util.Date;
 import java.util.List;
 
 public interface OrderSaveMapper {
@@ -16,9 +18,9 @@ public interface OrderSaveMapper {
 
     OrderResponse getOrderResponse(OrderDto orderDto, TextDto textDto, List<ChannelResponse> channelResponses);
 
-    OrderDatesDto getOrderDatesDto(OrderRequest orderRequest, ChannelOrderDto channelOrderDto, int i, int j);
+    OrderDatesDto getOrderDatesDto(OrderRequest orderRequest, ChannelOrderDto channelOrderDto, Date j);
 
-    ChannelOrderDto getChannelOrderDto(ChannelDto channelDto, OrderDto orderDto, OrderRequest orderRequest, int i);
+    ChannelOrderDto getChannelOrderDto(ChannelDto channelDto, OrderDto orderDto, OrderRequest orderRequest, ChannelRequest channelRequest);
 
     Channel channelSaveResponseToChannel (ChannelSaveResponse channelDto);
 

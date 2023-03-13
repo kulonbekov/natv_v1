@@ -7,6 +7,7 @@ import kg.mega.natv_v1.models.dtos.*;
 import kg.mega.natv_v1.models.entities.Channel;
 import kg.mega.natv_v1.models.enums.ChannelStatus;
 import kg.mega.natv_v1.models.enums.OrderStatus;
+import kg.mega.natv_v1.models.requests.ChannelRequest;
 import kg.mega.natv_v1.models.requests.OrderRequest;
 import kg.mega.natv_v1.models.requests.PriceRequest;
 import kg.mega.natv_v1.models.responses.ChannelResponse;
@@ -68,17 +69,17 @@ public class OrderSaveMapperImpl implements OrderSaveMapper {
     }
 
     @Override
-    public OrderDatesDto getOrderDatesDto(OrderRequest orderRequest, ChannelOrderDto channelOrderDto, int i, int j) {
+    public OrderDatesDto getOrderDatesDto(OrderRequest orderRequest, ChannelOrderDto channelOrderDto, Date j) {
         OrderDatesDto orderDatesDto = new OrderDatesDto();
-        orderDatesDto.setDate(orderRequest.getChannelRequest().get(i).getDateList().get(j));
+        orderDatesDto.setDate(j);
         orderDatesDto.setChannelOrderDto(channelOrderDto);
 
         return orderDatesDto;
     }
 
     @Override
-    public ChannelOrderDto getChannelOrderDto(ChannelDto channelDto, OrderDto orderDto, OrderRequest orderRequest, int i) {
-        int daysCount = orderRequest.getChannelRequest().get(i).getDateList().size();
+    public ChannelOrderDto getChannelOrderDto(ChannelDto channelDto, OrderDto orderDto, OrderRequest orderRequest, ChannelRequest channelRequest) {
+        int daysCount = channelRequest.getDateList().size();
         ChannelOrderDto channelOrderDto = new ChannelOrderDto();
         channelOrderDto.setDaysCount(daysCount);
         channelOrderDto.setChannelDto(channelDto);
