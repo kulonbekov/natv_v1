@@ -12,7 +12,7 @@ import kg.mega.natv_v1.models.responses.OrderResponse;
 import kg.mega.natv_v1.models.responses.PriceResponse;
 import kg.mega.natv_v1.services.crudOperations.*;
 import kg.mega.natv_v1.services.email.EmailService;
-import kg.mega.natv_v1.services.mainOperations.AdvertisingRequestService;
+import kg.mega.natv_v1.services.mainOperations.OrderAdvertisingService;
 import kg.mega.natv_v1.services.mainOperations.GetCostAdsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,10 +20,11 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class AdvertisingRequestServiceImpl implements AdvertisingRequestService {
+public class OrderAdvertisingServiceImpl implements OrderAdvertisingService {
     private final OrderService orderService;
     private final DiscountRep discountRep;
     private final ChannelOrderService channelOrderService;
@@ -36,7 +37,7 @@ public class AdvertisingRequestServiceImpl implements AdvertisingRequestService 
     private final GetCostAdsService getCostAdsService;
 
     @Override
-    public OrderResponse newCreateAd(OrderRequest orderRequest) {
+    public OrderResponse CreateAdvertising(OrderRequest orderRequest) {
 
         OrderDto orderDto;
         List<ChannelResponse> channelResponses = new ArrayList<>();
@@ -54,46 +55,34 @@ public class AdvertisingRequestServiceImpl implements AdvertisingRequestService 
             saveChannelOrder(orderRequest, orderDto); //Сохранение нового записа в промежуточную таблицу "tb_channel_order" и сохранение записей дат в таблицу "tb_order_dates"
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            throw new RuntimeException("\n" + "Save error 'ChannelOrder'");
+            throw new RuntimeException("Save error 'ChannelOrder'");
         }
 
         OrderResponse orderResponse = orderSaveMapper.getOrderResponse(orderDto, textDto, channelResponses);
+
         settingEmail(orderResponse); //Отправка письма к клиенту
+
         return orderResponse; //возвращает json для "orderResponse"
     }
 
 
-    @Override
-    public void settingEmail(OrderResponse orderResponse) {
-        String email = orderResponse.getClientEmail();
-        String subject = "Advertising" + new Date();
-        String text = emailMapper.orderResponseToString(orderResponse);
+    private List<ChannelResponse> saveChannelResponse(OrderRequest orderRequest, TextDto textDto) { // сформировать json для ChannelResponse
 
-        try {
-            emailService.send(email, subject, text);
-        } catch (Exception e) {
-            e.getMessage();
-        }
+        List<ChannelResponse> channelResponses = orderRequest.getChannelRequest().stream()
+                .map(item ->getChannelResponse(item,textDto))
+                .collect(Collectors.toList());
+        return channelResponses;
     }
+    private ChannelResponse getChannelResponse(ChannelRequest item, TextDto textDto){ // Получить объект ChannelResponse
 
-    private TextDto getTextDto(OrderRequest orderRequest) { //Сохранение нового записа в таблицу tb_text "Текст обьявления"
-        TextDto textDto = new TextDto();
-        textDto.setText(orderRequest.getText());
-        return textService.save(textDto);
-    }
+        ChannelResponse channelResponse = new ChannelResponse();
 
+        channelResponse.setChannelId(item.getChannelId());
+        channelResponse.setPrice(getPriceResponse(item, textDto).getPrice());
+        channelResponse.setPriceWithDiscount(getPriceResponse(item, textDto).getPriceWithDiscount());
+        channelResponse.setDateList(item.getDateList());
 
-    private int getDiscount(List<Discount> discounts, int daysCount) { //Получить из базы текущие скидки по каналу и получить актуальную скидку по заданному количеству дней
-        int discount = 0;
-
-        for (Discount item : discounts) {
-            if (item.getStartDate().before(new Date()) &&
-                    item.getEndDate().after(new Date()) &&
-                    item.getDiscountDays() <= daysCount) {
-                discount = item.getDiscount();
-            }
-        }
-        return discount;
+        return channelResponse;
     }
 
     private void saveChannelOrder(OrderRequest orderRequest, OrderDto orderDto) { //Сохранение нового записа в промежуточную таблицу "tb_channel_order" и сохранение записей дат в таблицу "tb_order_dates"
@@ -108,37 +97,35 @@ public class AdvertisingRequestServiceImpl implements AdvertisingRequestService 
         }
     }
 
-    private List<ChannelResponse> saveChannelResponse(OrderRequest orderRequest, TextDto textDto) { // сформировать json для ChannelResponse
+    private int getDiscount(List<Discount> discounts, int daysCount) { //Получить из базы текущие скидки по каналу и получить актуальную скидку по заданному количеству дней
+        int discount = 0;
 
-        List<ChannelResponse> channelResponses = new ArrayList<>();
-
-        for (ChannelRequest item : orderRequest.getChannelRequest()) {
-            channelResponses.add(getChannelResponse(item,textDto));
+        for (Discount item : discounts) {
+            if (item.getStartDate().before(new Date()) &&
+                    item.getEndDate().after(new Date()) &&
+                    item.getDiscountDays() <= daysCount) {
+                discount = item.getDiscount();
+            }
         }
-        return channelResponses;
+        return discount;
     }
-    private ChannelResponse getChannelResponse(ChannelRequest item, TextDto textDto){ // Получить объект ChannelResponse
 
-        ChannelResponse channelResponse = new ChannelResponse();
-
-        channelResponse.setChannelId(item.getChannelId());
-        channelResponse.setPrice(getPriceWithDiscount(item, textDto).getPrice());
-        channelResponse.setPriceWithDiscount(getPriceWithDiscount(item, textDto).getPriceWithDiscount());
-        channelResponse.setDateList(item.getDateList());
-
-        return channelResponse;
+    private TextDto getTextDto(OrderRequest orderRequest) { //Сохранение нового записа в таблицу tb_text "Текст обьявления"
+        TextDto textDto = new TextDto();
+        textDto.setText(orderRequest.getText());
+        return textService.save(textDto);
     }
 
     private double getTotalPrice(OrderRequest orderRequest, TextDto textDto) { //Получить total price по всем каналам
         double totalPrice = 0.0;
 
         for (ChannelRequest item : orderRequest.getChannelRequest()) {
-            totalPrice += getPriceWithDiscount(item, textDto).getPriceWithDiscount();
+            totalPrice += getPriceResponse(item, textDto).getPriceWithDiscount();
         }
         return totalPrice;
     }
 
-    private PriceResponse getPriceWithDiscount(ChannelRequest item, TextDto textDto) { // Метод для подсчета price и priceWithDiscount
+    private PriceResponse getPriceResponse(ChannelRequest item, TextDto textDto) { // Метод для подсчета price и priceWithDiscount
         PriceResponse priceResponse = new PriceResponse();
 
         int daysCount = item.getDateList().size();
@@ -152,5 +139,16 @@ public class AdvertisingRequestServiceImpl implements AdvertisingRequestService 
         priceResponse.setPriceWithDiscount(priceWithDiscount);
 
         return priceResponse;
+    }
+    private void settingEmail(OrderResponse orderResponse) {
+        String email = orderResponse.getClientEmail();
+        String subject = "Advertising" + new Date();
+        String text = emailMapper.orderResponseToString(orderResponse);
+
+        try {
+            emailService.send(email, subject, text);
+        } catch (Exception e) {
+            e.getMessage();
+        }
     }
 }

@@ -10,7 +10,7 @@ import kg.mega.natv_v1.models.requests.OrderRequest;
 import kg.mega.natv_v1.models.requests.PriceRequest;
 import kg.mega.natv_v1.models.responses.ChannelSaveResponse;
 import kg.mega.natv_v1.services.crudOperations.ChannelService;
-import kg.mega.natv_v1.services.mainOperations.AdvertisingRequestService;
+import kg.mega.natv_v1.services.mainOperations.OrderAdvertisingService;
 import kg.mega.natv_v1.services.mainOperations.GetChannelListService;
 import kg.mega.natv_v1.services.mainOperations.GetCostAdsService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class OperationController {
 
     private final GetCostAdsService getCostAdsService;
     private final ChannelService channelService;
-    private final AdvertisingRequestService advertisingRequestService;
+    private final OrderAdvertisingService orderAdvertisingService;
     private final GetChannelListService getChannelListService;
     private final PriceRep priceRep;
     private final ChannelRep channelRep;
@@ -65,12 +65,12 @@ public class OperationController {
         }
         if (check) {
             try {
-                return ResponseEntity.ok(advertisingRequestService.newCreateAd(orderRequest));
+                return ResponseEntity.ok(orderAdvertisingService.CreateAdvertising(orderRequest));
             } catch (Exception e) {
                 return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
             }
         } else {
-            return ResponseEntity.status(400).body("Сhannel not found or not active");
+            return ResponseEntity.status(400).body("Channel not found or not active");
         }
 
     }
