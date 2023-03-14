@@ -12,11 +12,11 @@ import java.util.Date;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class OrderDatesDto {
+public class DayDto {
     Long id;
     @JsonFormat(pattern = "dd.MM.yyyy")
     @JsonProperty(value = "days")
     Date date;
-    @JsonProperty(value = "orderDates")
+    @JsonProperty(value = "Dates")
     ChannelOrderDto channelOrderDto;
 }

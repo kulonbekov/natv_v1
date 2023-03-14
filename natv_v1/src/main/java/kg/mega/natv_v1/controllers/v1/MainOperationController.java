@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.*;
 
 @Api(tags = "1. Операции")
 @RestController
-@RequestMapping("/api/v1/operation")
+@RequestMapping("/api/v1/main/operation")
 @RequiredArgsConstructor
-public class OperationController {
+public class MainOperationController {
 
     private final GetCostAdsService getCostAdsService;
     private final ChannelService channelService;
@@ -53,7 +53,7 @@ public class OperationController {
         }
     }
 
-    @PostMapping("/request/advertising")
+    @PostMapping("/order/advertising")
     @ApiOperation("Создание заявки на рекламу")
     ResponseEntity<?> save(@RequestBody OrderRequest orderRequest) {
 

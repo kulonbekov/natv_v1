@@ -29,7 +29,7 @@ public class OrderAdvertisingServiceImpl implements OrderAdvertisingService {
     private final DiscountRep discountRep;
     private final ChannelOrderService channelOrderService;
     private final ChannelService channelService;
-    private final OrderDatesService orderDatesService;
+    private final DayService dayService;
     private final OrderSaveMapper orderSaveMapper;
     private final TextService textService;
     private final EmailMapper emailMapper;
@@ -91,8 +91,8 @@ public class OrderAdvertisingServiceImpl implements OrderAdvertisingService {
             ChannelDto channelDto = channelService.findById(i.getChannelId());
             ChannelOrderDto channelOrderDto = channelOrderService.save(orderSaveMapper.getChannelOrderDto(channelDto, orderDto, orderRequest, i));
             for (Date j : i.getDateList()) {
-                OrderDatesDto orderDatesDto = orderSaveMapper.getOrderDatesDto(orderRequest, channelOrderDto, j);
-                orderDatesService.save(orderDatesDto);
+                DayDto dayDto = orderSaveMapper.getOrderDatesDto(orderRequest, channelOrderDto, j);
+                dayService.save(dayDto);
             }
         }
     }
@@ -142,7 +142,7 @@ public class OrderAdvertisingServiceImpl implements OrderAdvertisingService {
     }
     private void settingEmail(OrderResponse orderResponse) {
         String email = orderResponse.getClientEmail();
-        String subject = "Advertising" + new Date();
+        String subject = "Advertising " + new Date();
         String text = emailMapper.orderResponseToString(orderResponse);
 
         try {

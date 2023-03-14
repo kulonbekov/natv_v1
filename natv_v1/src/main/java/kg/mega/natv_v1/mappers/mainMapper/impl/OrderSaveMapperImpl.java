@@ -69,12 +69,12 @@ public class OrderSaveMapperImpl implements OrderSaveMapper {
     }
 
     @Override
-    public OrderDatesDto getOrderDatesDto(OrderRequest orderRequest, ChannelOrderDto channelOrderDto, Date j) {
-        OrderDatesDto orderDatesDto = new OrderDatesDto();
-        orderDatesDto.setDate(j);
-        orderDatesDto.setChannelOrderDto(channelOrderDto);
+    public DayDto getOrderDatesDto(OrderRequest orderRequest, ChannelOrderDto channelOrderDto, Date j) {
+        DayDto dayDto = new DayDto();
+        dayDto.setDate(j);
+        dayDto.setChannelOrderDto(channelOrderDto);
 
-        return orderDatesDto;
+        return dayDto;
     }
 
     @Override

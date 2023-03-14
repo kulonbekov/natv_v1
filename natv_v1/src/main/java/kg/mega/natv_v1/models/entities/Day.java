@@ -12,8 +12,8 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table(name = "tb_order_dates")
-public class OrderDates {
+@Table(name = "tb_day")
+public class Day {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;

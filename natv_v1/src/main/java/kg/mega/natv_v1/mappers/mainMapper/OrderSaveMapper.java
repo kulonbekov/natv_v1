@@ -18,7 +18,7 @@ public interface OrderSaveMapper {
 
     OrderResponse getOrderResponse(OrderDto orderDto, TextDto textDto, List<ChannelResponse> channelResponses);
 
-    OrderDatesDto getOrderDatesDto(OrderRequest orderRequest, ChannelOrderDto channelOrderDto, Date j);
+    DayDto getOrderDatesDto(OrderRequest orderRequest, ChannelOrderDto channelOrderDto, Date j);
 
     ChannelOrderDto getChannelOrderDto(ChannelDto channelDto, OrderDto orderDto, OrderRequest orderRequest, ChannelRequest channelRequest);
 

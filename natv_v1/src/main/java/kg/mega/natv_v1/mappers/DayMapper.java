@@ -1,7 +1,7 @@
 package kg.mega.natv_v1.mappers;
 
-import kg.mega.natv_v1.models.dtos.OrderDatesDto;
-import kg.mega.natv_v1.models.entities.OrderDates;
+import kg.mega.natv_v1.models.dtos.DayDto;
+import kg.mega.natv_v1.models.entities.Day;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -9,25 +9,26 @@ import org.mapstruct.factory.Mappers;
 import java.util.List;
 
 @Mapper
-public interface OrderDatesMapper {
+public interface DayMapper {
 
-    OrderDatesMapper INSTANCE = Mappers.getMapper(OrderDatesMapper.class);
+    DayMapper INSTANCE = Mappers.getMapper(DayMapper.class);
 
     @Mapping(source = "channelOrderDto", target = "channelOrder")
     @Mapping(source = "channelOrderDto.channelDto", target = "channelOrder.channel")
     @Mapping(source = "channelOrderDto.orderDto", target = "channelOrder.order")
     @Mapping(source = "channelOrderDto.orderDto.textDto", target = "channelOrder.order.text")
-    OrderDates orderDatesDtoToOrderDates(OrderDatesDto orderDatesDto);
+    Day dayDtoToDay(DayDto dayDto);
 
-    List<OrderDates> orderDatesDtoToOrderDatesList(List<OrderDatesDto> orderDatesDto);
+    List<Day> dayDtoToDayList(List<DayDto> dayDto);
 
     @Mapping(source = "channelOrder", target = "channelOrderDto")
     @Mapping(source = "channelOrder.channel", target = "channelOrderDto.channelDto")
     @Mapping(source = "channelOrder.order", target = "channelOrderDto.orderDto")
     @Mapping(source = "channelOrder.order.text", target = "channelOrderDto.orderDto.textDto")
-    OrderDatesDto orderDatesToOrderDatesDto(OrderDates orderDates);
+    DayDto dayToDayDto(Day day);
 
-    List<OrderDatesDto> orderDatesToOrderDatesDtoList(List<OrderDates> orderDates);
+    List<DayDto> dayToDayDtoList(List<Day> dates);
+
 
 
 }

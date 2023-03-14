@@ -28,6 +28,7 @@ public class User {
     String login;
     String email;
     String phone;
+    String password;
     @Enumerated(EnumType.STRING)
     UserStatus userStatus;
 
