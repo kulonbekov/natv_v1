@@ -12,8 +12,8 @@ import kg.mega.natv_v1.models.responses.OrderResponse;
 import kg.mega.natv_v1.models.responses.PriceResponse;
 import kg.mega.natv_v1.services.crudOperations.*;
 import kg.mega.natv_v1.services.email.EmailService;
-import kg.mega.natv_v1.services.mainOperations.OrderAdvertisingService;
 import kg.mega.natv_v1.services.mainOperations.GetCostAdsService;
+import kg.mega.natv_v1.services.mainOperations.OrderAdvertisingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -69,11 +69,12 @@ public class OrderAdvertisingServiceImpl implements OrderAdvertisingService {
     private List<ChannelResponse> saveChannelResponse(OrderRequest orderRequest, TextDto textDto) { // сформировать json для ChannelResponse
 
         List<ChannelResponse> channelResponses = orderRequest.getChannelRequest().stream()
-                .map(item ->getChannelResponse(item,textDto))
+                .map(item -> getChannelResponse(item, textDto))
                 .collect(Collectors.toList());
         return channelResponses;
     }
-    private ChannelResponse getChannelResponse(ChannelRequest item, TextDto textDto){ // Получить объект ChannelResponse
+
+    private ChannelResponse getChannelResponse(ChannelRequest item, TextDto textDto) { // Получить объект ChannelResponse
 
         ChannelResponse channelResponse = new ChannelResponse();
 
@@ -140,6 +141,7 @@ public class OrderAdvertisingServiceImpl implements OrderAdvertisingService {
 
         return priceResponse;
     }
+
     private void settingEmail(OrderResponse orderResponse) {
         String email = orderResponse.getClientEmail();
         String subject = "Advertising " + new Date();
