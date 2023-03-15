@@ -13,7 +13,7 @@ import java.util.List;
 
 @Api(tags = "4. Скидки")
 @RestController
-@RequestMapping("/api/v1/discount")
+@RequestMapping("/api/v2/discount")
 @RequiredArgsConstructor
 public class DiscountController {
 

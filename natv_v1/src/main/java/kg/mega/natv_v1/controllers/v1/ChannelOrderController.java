@@ -13,7 +13,7 @@ import java.util.List;
 
 @Api(tags = "8. Каналы и Заказы")
 @RestController
-@RequestMapping("/api/v1/channelOrder")
+@RequestMapping("/api/v2/channelOrder")
 @RequiredArgsConstructor
 public class ChannelOrderController {
 

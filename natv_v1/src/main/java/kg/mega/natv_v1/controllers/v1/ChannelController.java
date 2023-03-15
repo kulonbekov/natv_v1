@@ -13,7 +13,7 @@ import java.util.List;
 
 @Api(tags = "2. Каналы")
 @RestController
-@RequestMapping("/api/v1/channel")
+@RequestMapping("/api/v2/channel")
 @RequiredArgsConstructor
 public class ChannelController {
     private final ChannelService channelService;

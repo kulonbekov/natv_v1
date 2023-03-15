@@ -13,7 +13,7 @@ import java.util.List;
 
 @Api(tags = "5. Заказы")
 @RestController
-@RequestMapping("/api/v1/order")
+@RequestMapping("/api/v2/order")
 @RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;

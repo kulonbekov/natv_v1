@@ -18,9 +18,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Api(tags = "1. Операции")
+@Api(tags = "1. Основные операции")
 @RestController
-@RequestMapping("/api/v1/main/operation")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class MainOperationController {
 
@@ -31,7 +31,7 @@ public class MainOperationController {
     private final PriceRep priceRep;
     private final ChannelRep channelRep;
 
-    @PostMapping("/channel/calculate")
+    @PostMapping ("/channel/calculate")
     @ApiOperation("Получить стоимости рекламы на одном канале")
     ResponseEntity<?> calculate(@RequestBody PriceRequest priceRequest) {
         ChannelDto channelDto = null;
@@ -53,7 +53,7 @@ public class MainOperationController {
         }
     }
 
-    @PostMapping("/order/advertising")
+    @PostMapping("/order/save")
     @ApiOperation("Создание заявки на рекламу")
     ResponseEntity<?> save(@RequestBody OrderRequest orderRequest) {
 

@@ -13,7 +13,7 @@ import java.util.List;
 
 @Api(tags = "6. Тексты реклам")
 @RestController
-@RequestMapping("/api/v1/text")
+@RequestMapping("/api/v2/text")
 @RequiredArgsConstructor
 public class TextController {
     private final TextService textService;

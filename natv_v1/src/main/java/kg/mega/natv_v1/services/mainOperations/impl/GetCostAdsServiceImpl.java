@@ -30,6 +30,8 @@ public class GetCostAdsServiceImpl implements GetCostAdsService {
         int symbolCount = (priceRequest.getText().replaceAll(" ", "").length()); // Подсчитать количество символов в тексте обьявления
         double price = getPrice(priceRequest.getChannelId()) * symbolCount * priceRequest.getDaysCount(); // Подсчитать общую сумму без скидки
         double priceWithDiscount = price - ((price * discount) / 100); // Подсчитать общую сумму со скидкой
+        String text = getFormattedText(priceRequest.getText());
+        priceRequest.setText(text);
 
         return orderSaveMapper.requestToResponse(priceRequest, price, priceWithDiscount); //Возвращает json "PriceResponse"
 
@@ -62,5 +64,9 @@ public class GetCostAdsServiceImpl implements GetCostAdsService {
             }
         }
         return price;
+    }
+
+    private String getFormattedText(String text){
+        return text.trim().replaceAll("\\s++"," ");
     }
 }

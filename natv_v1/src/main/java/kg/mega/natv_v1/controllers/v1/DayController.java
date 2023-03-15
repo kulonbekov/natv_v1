@@ -13,7 +13,7 @@ import java.util.List;
 
 @Api(tags = "9. Даты заказов")
 @RestController
-@RequestMapping("/api/v1/order/dates")
+@RequestMapping("/api/v2/order/dates")
 @RequiredArgsConstructor
 public class DayController {
 

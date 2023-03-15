@@ -14,7 +14,7 @@ import java.util.List;
 
 @Api(tags = "3. Стоимость")
 @RestController
-@RequestMapping("/api/v1/price")
+@RequestMapping("/api/v2/price")
 @RequiredArgsConstructor
 public class PriceController {
     private final PriceService priceService;

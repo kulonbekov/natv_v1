@@ -113,7 +113,8 @@ public class OrderAdvertisingServiceImpl implements OrderAdvertisingService {
 
     private TextDto getTextDto(OrderRequest orderRequest) { //Сохранение нового записа в таблицу tb_text "Текст обьявления"
         TextDto textDto = new TextDto();
-        textDto.setText(orderRequest.getText());
+        String text = getFormattedText(orderRequest.getText());
+        textDto.setText(text);
         return textService.save(textDto);
     }
 
@@ -140,6 +141,10 @@ public class OrderAdvertisingServiceImpl implements OrderAdvertisingService {
         priceResponse.setPriceWithDiscount(priceWithDiscount);
 
         return priceResponse;
+    }
+
+    private String getFormattedText(String text){
+        return text.trim().replaceAll("\\s++"," ");
     }
 
     private void settingEmail(OrderResponse orderResponse) {

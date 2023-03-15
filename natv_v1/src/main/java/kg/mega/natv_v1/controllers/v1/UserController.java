@@ -13,7 +13,7 @@ import java.util.List;
 
 @Api(tags = "7. Пользователи")
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v2/user")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
