@@ -13,4 +13,6 @@ public class ChannelOrderDto {
     ChannelDto channelDto;
     OrderDto orderDto;
     int daysCount;
+    double price;
+    double priceWithDiscount;
 }

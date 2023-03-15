@@ -78,12 +78,14 @@ public class OrderSaveMapperImpl implements OrderSaveMapper {
     }
 
     @Override
-    public ChannelOrderDto getChannelOrderDto(ChannelDto channelDto, OrderDto orderDto, OrderRequest orderRequest, ChannelRequest channelRequest) {
+    public ChannelOrderDto getChannelOrderDto(ChannelDto channelDto, OrderDto orderDto, OrderRequest orderRequest, ChannelRequest channelRequest, PriceResponse priceResponse) {
         int daysCount = channelRequest.getDateList().size();
         ChannelOrderDto channelOrderDto = new ChannelOrderDto();
         channelOrderDto.setDaysCount(daysCount);
         channelOrderDto.setChannelDto(channelDto);
         channelOrderDto.setOrderDto(orderDto);
+        channelOrderDto.setPrice(priceResponse.getPrice());
+        channelOrderDto.setPriceWithDiscount(priceResponse.getPriceWithDiscount());
         return channelOrderDto;
     }
 

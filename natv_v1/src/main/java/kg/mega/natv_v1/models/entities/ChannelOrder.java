@@ -24,4 +24,6 @@ public class ChannelOrder {
     @JoinColumn(name = "order_id")
     Order order;
     int daysCount;
+    double price;
+    double priceWithDiscount;
 }

@@ -52,7 +52,7 @@ public class OrderAdvertisingServiceImpl implements OrderAdvertisingService {
             throw new RuntimeException("Save error 'Order' ");
         }
         try {
-            saveChannelOrder(orderRequest, orderDto); //Сохранение нового записа в промежуточную таблицу "tb_channel_order" и сохранение записей дат в таблицу "tb_order_dates"
+            saveChannelOrder(orderRequest, orderDto, textDto); //Сохранение нового записа в промежуточную таблицу "tb_channel_order" и сохранение записей дат в таблицу "tb_order_dates"
         } catch (Exception e) {
             System.out.println(e.getMessage());
             throw new RuntimeException("Save error 'ChannelOrder'");
@@ -86,11 +86,11 @@ public class OrderAdvertisingServiceImpl implements OrderAdvertisingService {
         return channelResponse;
     }
 
-    private void saveChannelOrder(OrderRequest orderRequest, OrderDto orderDto) { //Сохранение нового записа в промежуточную таблицу "tb_channel_order" и сохранение записей дат в таблицу "tb_order_dates"
+    private void saveChannelOrder(OrderRequest orderRequest, OrderDto orderDto, TextDto textDto) { //Сохранение нового записа в промежуточную таблицу "tb_channel_order" и сохранение записей дат в таблицу "tb_order_dates"
 
         for (ChannelRequest i : orderRequest.getChannelRequest()) {
             ChannelDto channelDto = channelService.findById(i.getChannelId());
-            ChannelOrderDto channelOrderDto = channelOrderService.save(orderSaveMapper.getChannelOrderDto(channelDto, orderDto, orderRequest, i));
+            ChannelOrderDto channelOrderDto = channelOrderService.save(orderSaveMapper.getChannelOrderDto(channelDto, orderDto, orderRequest, i, getPriceResponse(i,textDto)));
             for (Date j : i.getDateList()) {
                 DayDto dayDto = orderSaveMapper.getOrderDatesDto(orderRequest, channelOrderDto, j);
                 dayService.save(dayDto);
